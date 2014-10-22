@@ -82,6 +82,8 @@ namespace KinectColorApp
             const int GreenIndex = 1;
             const int RedIndex = 2;
 
+            bool didDrawPoint = false;
+
             // Loop through data and set colors for each pixel
             for (int depthIndex = 0, colorIndex = 0;
                  depthIndex < rawDepthData.Length && colorIndex < pixels.Length;
@@ -90,32 +92,74 @@ namespace KinectColorApp
                 int player = rawDepthData[depthIndex] & DepthImageFrame.PlayerIndexBitmask;
                 int depth = rawDepthData[depthIndex] >> DepthImageFrame.PlayerIndexBitmaskWidth;
                 //Console.WriteLine(depth);
-                if (depth <= 900)
-                {
-                    pixels[colorIndex + BlueIndex] = 255;
-                    pixels[colorIndex + GreenIndex] = 0;
-                    pixels[colorIndex + RedIndex] = 0;
-                }
-                else if (depth > 900 && depth < 2000)
-                {
-                    pixels[colorIndex + BlueIndex] = 0;
-                    pixels[colorIndex + GreenIndex] = 255;
-                    pixels[colorIndex + RedIndex] = 0;
-                }
-                else if (depth >= 2000)
-                {
-                    pixels[colorIndex + BlueIndex] = 0;
-                    pixels[colorIndex + GreenIndex] = 0;
-                    pixels[colorIndex + RedIndex] = 255;
-                }
+
+                if (depth == -1 || depth == 0) continue;
 
                 byte intensity = CalculateIntensityFromDepth(depth);
                 pixels[colorIndex + BlueIndex] = intensity;
                 pixels[colorIndex + GreenIndex] = intensity;
                 pixels[colorIndex + RedIndex] = intensity;
+
+                if (depth <= 900)
+                {
+                   // Console.WriteLine(depth);
+                    pixels[colorIndex + BlueIndex] = Convert.ToByte(255 * (1 - (depth / 900.0)));
+                    pixels[colorIndex + GreenIndex] = 0;
+                    pixels[colorIndex + RedIndex] = 255;
+
+
+                    int x_kinect = (int) ((depthIndex) % depthFrame.Width);
+                    int y_kinect = (int)((depthIndex) / depthFrame.Width);
+
+                    double x_ratio = x_kinect / (double)depthFrame.Width;
+                    double y_ratio = y_kinect / (double)depthFrame.Height;
+
+                    int x = (int)(x_ratio*drawingCanvas.Width);
+                    int y = (int)(y_ratio*drawingCanvas.Height);
+
+                    if (!didDrawPoint)
+                    {
+                        Console.WriteLine(x_ratio);
+
+                        var images = drawingCanvas.Children.OfType<Ellipse>().ToList();
+                        //foreach (var image in images)
+                        //{
+                        //    drawingCanvas.Children.Remove(image);
+                        //}
+                        drawEllipseAtPoint(x, y);
+                        didDrawPoint = true;
+                    }
+                }
             }
 
             return pixels;
+        }
+
+        void drawEllipseAtPoint(int x, int y)
+        {
+            // Create a red Ellipse.
+            Ellipse myEllipse = new Ellipse();
+
+            // Create a SolidColorBrush with a red color to fill the  
+            // Ellipse with.
+            SolidColorBrush mySolidColorBrush = new SolidColorBrush();
+
+            // Describes the brush's color using RGB values.  
+            // Each value has a range of 0-255.
+            mySolidColorBrush.Color = Color.FromArgb(255, 255, 255, 0);
+            myEllipse.Fill = mySolidColorBrush;
+            myEllipse.StrokeThickness = 0;
+            myEllipse.Stroke = Brushes.Black;
+
+            // Set the width and height of the Ellipse.
+            myEllipse.Width = 20;
+            myEllipse.Height = 20;
+
+            Canvas.SetTop(myEllipse, y);
+            Canvas.SetLeft(myEllipse, x);
+
+            // Add the Ellipse to the StackPanel.
+            drawingCanvas.Children.Add(myEllipse);
         }
 
         public static byte CalculateIntensityFromDepth(int distance)
