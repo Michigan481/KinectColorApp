@@ -19,7 +19,7 @@ namespace KinectColorApp
             drawingCanvas = canvas;
         }
 
-        public void drawEllipseAtPoint(int x, int y)
+        public void drawEllipseAtPoint(int x, int y, int depth)
         {
             // Create a red Ellipse.
             Ellipse myEllipse = new Ellipse();
@@ -30,14 +30,16 @@ namespace KinectColorApp
 
             // Describes the brush's color using RGB values.  
             // Each value has a range of 0-255.
-            mySolidColorBrush.Color = Color.FromArgb(255, 0, 0, 255);
+            int blueValue = (int) (255 * (1-(depth / 170.0)));
+            if (blueValue < 0) blueValue = 0;
+            mySolidColorBrush.Color = Color.FromArgb(255, (byte)blueValue, 0, 0);
             myEllipse.Fill = mySolidColorBrush;
             myEllipse.StrokeThickness = 0;
             myEllipse.Stroke = Brushes.Black;
 
             // Set the width and height of the Ellipse.
-            myEllipse.Width = 20;
-            myEllipse.Height = 20;
+            myEllipse.Width = 40;
+            myEllipse.Height = 40;
 
             Canvas.SetTop(myEllipse, y);
             Canvas.SetLeft(myEllipse, x);

@@ -12,6 +12,8 @@ namespace KinectColorApp
 {
     class KinectController
     {
+        const int DepthThreshold = 900;
+
         private Image debugImage;
         private DrawController drawController;
 
@@ -50,7 +52,8 @@ namespace KinectColorApp
             const int GreenIndex = 1;
             const int RedIndex = 2;
 
-            bool didDrawPoint = false;
+            int minDepth = DepthThreshold;
+            int bestDepthIndex = -1;
 
             // Loop through data and set colors for each pixel
             for (int depthIndex = 0, colorIndex = 0;
@@ -59,7 +62,6 @@ namespace KinectColorApp
             {
                 int player = rawDepthData[depthIndex] & DepthImageFrame.PlayerIndexBitmask;
                 int depth = rawDepthData[depthIndex] >> DepthImageFrame.PlayerIndexBitmaskWidth;
-                //Console.WriteLine(depth);
 
                 if (depth == -1 || depth == 0) continue;
 
@@ -68,30 +70,40 @@ namespace KinectColorApp
                 pixels[colorIndex + GreenIndex] = intensity;
                 pixels[colorIndex + RedIndex] = intensity;
 
-                if (depth <= 900)
+                if (depth <= DepthThreshold)
                 {
-                    pixels[colorIndex + BlueIndex] = Convert.ToByte(255 * (1 - (depth / 900.0)));
+                    pixels[colorIndex + BlueIndex] = Convert.ToByte(255 * (1 - (depth / (double)DepthThreshold)));
                     pixels[colorIndex + GreenIndex] = 0;
                     pixels[colorIndex + RedIndex] = 255;
 
-                    int x_kinect = (int)((depthIndex) % depthFrame.Width);
-                    int y_kinect = (int)((depthIndex) / depthFrame.Width);
-
-                    double x_ratio = x_kinect / (double)depthFrame.Width;
-                    double y_ratio = y_kinect / (double)depthFrame.Height;
-
-                    int x = (int)(x_ratio * drawController.drawingCanvas.Width);
-                    int y = (int)(y_ratio * drawController.drawingCanvas.Height);
-
-                    if (!didDrawPoint)
+                    if (depth < minDepth)
                     {
-                        drawController.drawEllipseAtPoint(x, y);
-                        didDrawPoint = true;
+                        minDepth = depth;
+                        bestDepthIndex = depthIndex;
                     }
                 }
             }
 
+            if (bestDepthIndex >= 0)
+            {
+                drawPoint(depthFrame, bestDepthIndex, minDepth);
+            }
+
             return pixels;
+        }
+
+        private void drawPoint(DepthImageFrame depthFrame, int depthIndex, int minDepth)
+        {
+            int x_kinect = (int)((depthIndex) % depthFrame.Width);
+            int y_kinect = (int)((depthIndex) / depthFrame.Width);
+
+            double x_ratio = x_kinect / (double)depthFrame.Width;
+            double y_ratio = y_kinect / (double)depthFrame.Height;
+
+            int x = (int)(x_ratio * drawController.drawingCanvas.Width);
+            int y = (int)(y_ratio * drawController.drawingCanvas.Height);
+
+            drawController.drawEllipseAtPoint(x, y, (DepthThreshold-minDepth));
         }
 
         private static byte CalculateIntensityFromDepth(int distance)
