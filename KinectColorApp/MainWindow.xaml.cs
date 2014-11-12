@@ -23,10 +23,12 @@ namespace KinectColorApp
             InitializeComponent();
             drawController = new DrawController(drawingCanvas);
             kinectController = new KinectController(drawController, image1);
+            galileoController = new GalileoController(drawController, "COM3", 9600);
         }
 
         private DrawController drawController;
         private KinectController kinectController;
+        private GalileoController galileoController;
         private KinectSensor sensor;
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -64,6 +66,7 @@ namespace KinectColorApp
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             StopKinect(this.sensor);
+            galileoController.closePort();
         }
     }
 }
