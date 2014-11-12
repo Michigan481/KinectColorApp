@@ -46,6 +46,12 @@ namespace KinectColorApp
             }
         }
 
+        private void Window_Size_Did_Change(object sender, RoutedEventArgs e)
+        {
+            drawingCanvas.Width = drawingGrid.ActualWidth;
+            drawingCanvas.Height = drawingGrid.ActualHeight;
+        }
+
         void StopKinect(KinectSensor sensor)
         {
             if (sensor != null)
