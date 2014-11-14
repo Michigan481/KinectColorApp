@@ -30,7 +30,9 @@ namespace KinectColorApp
 
             // Describes the brush's color using RGB values.  
             // Each value has a range of 0-255.
-            int blueValue = (int) (255 * (1-(depth / 170.0)));
+            //Console.WriteLine(depth);
+
+            int blueValue = (int) (255 * (depth / 170.0));
             if (blueValue < 0) blueValue = 0;
             mySolidColorBrush.Color = Color.FromArgb(255, (byte)blueValue, 0, 0);
             myEllipse.Fill = mySolidColorBrush;

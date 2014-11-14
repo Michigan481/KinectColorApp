@@ -2,16 +2,19 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:WpfViewers="clr-namespace:Microsoft.Samples.Kinect.WpfViewers;assembly=Microsoft.Samples.Kinect.WpfViewers" x:Class="KinectColorApp.MainWindow"
-        Title="MainWindow" Height="1154.688" Width="1921.823" Loaded="Window_Loaded" Closing="Window_Closing" SizeChanged="Window_Size_Did_Change">
+        Title="MainWindow" Height="516.021" Width="654.489" Loaded="Window_Loaded" Closing="Window_Closing" SizeChanged="Window_Size_Did_Change">
     <Grid x:Name="drawingGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="214*"/>
             <ColumnDefinition Width="81*"/>
             <ColumnDefinition Width="388*"/>
-            <ColumnDefinition Width="1232*"/>
+            <ColumnDefinition Width="1037*"/>
+            <ColumnDefinition Width="195*"/>
         </Grid.ColumnDefinitions>
-        <Image x:Name="image1" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Grid.Column="3" Margin="126.334,0,0,0"/>
-        <Canvas x:Name="drawingCanvas" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Background="#FFE4E4E4" Grid.ColumnSpan="3"/>
+        <Canvas x:Name="drawingCanvas" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMoved" MouseUp="Canvas_MouseUp" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Background="#FFE4E4E4" Grid.ColumnSpan="3">
+            <Rectangle x:Name="calibrationBorder" Height="480" Stroke="#FFED00FF" Width="640" StrokeThickness="10"/>
+            <Image x:Name="image1" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Canvas.Left="10" Canvas.Top="10"/>
+        </Canvas>
 
     </Grid>
 </Window>

@@ -52,6 +52,58 @@ namespace KinectColorApp
         {
             drawingCanvas.Width = drawingGrid.ActualWidth;
             drawingCanvas.Height = drawingGrid.ActualHeight;
+
+            calibrationBorder.Width = drawingGrid.ActualWidth;
+            calibrationBorder.Height = drawingGrid.ActualHeight;
+        }
+
+        // Calibration
+        private Point startPoint;
+        private Rectangle rect;
+
+        private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            startPoint = e.GetPosition(drawingCanvas);
+            rect = new Rectangle
+            {
+                Stroke = Brushes.Red,
+                StrokeThickness = 2
+            };
+
+            Canvas.SetLeft(rect, startPoint.X);
+            Canvas.SetTop(rect, startPoint.X);
+            drawingCanvas.Children.Add(rect);
+        }
+
+        private void Canvas_MouseMoved(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Released || rect == null)
+                return;
+
+            var pos = e.GetPosition(drawingCanvas);
+
+            var x = Math.Min(pos.X, startPoint.X);
+            var y = Math.Min(pos.Y, startPoint.Y);
+
+            var w = Math.Max(pos.X, startPoint.X) - x;
+            var h = Math.Max(pos.Y, startPoint.Y) - y;
+
+            rect.Width = w;
+            rect.Height = h;
+
+            Canvas.SetLeft(rect, x);
+            Canvas.SetTop(rect, y);
+        }
+
+        private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            Point endPoint = e.GetPosition(drawingCanvas);
+            this.kinectController.Calibrate((int)startPoint.X - 10, (int)startPoint.Y - 10, (int)endPoint.X - 10, (int)endPoint.Y - 10);
+
+            this.calibrationBorder.Visibility = Visibility.Hidden;
+            //this.image1.Visibility = Visibility.Hidden;
+            //rect.Visibility = Visibility.Hidden;
+            rect = null;
         }
 
         void StopKinect(KinectSensor sensor)
