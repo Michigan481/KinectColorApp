@@ -12,11 +12,17 @@ namespace KinectColorApp
 {
     class DrawController
     {
+        private int color = 1;
         public Canvas drawingCanvas; 
 
         public DrawController(Canvas canvas)
         {
             drawingCanvas = canvas;
+        }
+
+        public void changeColor(int new_color)
+        {
+            color = new_color;
         }
 
         public void drawEllipseAtPoint(int x, int y, int depth)
@@ -32,9 +38,24 @@ namespace KinectColorApp
             // Each value has a range of 0-255.
             //Console.WriteLine(depth);
 
-            int blueValue = (int) (255 * (depth / 170.0));
-            if (blueValue < 0) blueValue = 0;
-            mySolidColorBrush.Color = Color.FromArgb(255, (byte)blueValue, 0, 0);
+            int colorValue = (int) (255 * (depth / 170.0));
+            if (colorValue < 0) colorValue = 0;
+
+            // Change what color we actually make the ellipse:
+            // 1: Red, 2: Blue, 3: Green
+            if (color == 1)
+            {
+                mySolidColorBrush.Color = Color.FromArgb(255, (byte)colorValue, 0, 0);
+            }
+            else if (color == 2)
+            {
+                mySolidColorBrush.Color = Color.FromArgb(255, 0, (byte)colorValue, 0);
+            }
+            else
+            {
+                mySolidColorBrush.Color = Color.FromArgb(255, 0, 0, (byte)colorValue);
+            }
+
             myEllipse.Fill = mySolidColorBrush;
             myEllipse.StrokeThickness = 0;
             myEllipse.Stroke = Brushes.Black;
