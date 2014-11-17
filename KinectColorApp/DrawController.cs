@@ -70,5 +70,18 @@ namespace KinectColorApp
             // Add the Ellipse to the StackPanel.
             drawingCanvas.Children.Add(myEllipse);
         }
+
+        public void ClearScreen()
+        {
+            // Remove everything
+            //drawingCanvas.Children.Clear();
+
+            // Remove ellipses only (For testing with debug image)
+            var shapes = drawingCanvas.Children.OfType<Ellipse>().ToList();
+            foreach (var shape in shapes)
+            {
+                drawingCanvas.Children.Remove(shape);
+            }
+        }
     }
 }
