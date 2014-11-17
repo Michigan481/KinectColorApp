@@ -16,6 +16,7 @@ namespace KinectColorApp
         string portName;
         int baudRate;
         bool _continue;
+        char prevColor = '0';
 
         public GalileoController(DrawController dc, string pN, int bR)
         {
@@ -45,9 +46,30 @@ namespace KinectColorApp
                 try
                 {
                     string message = port.ReadLine();
-                    Console.WriteLine("msg: ");
+                    char currColor = message[0];
+                    //Console.WriteLine("msg: " + currColor);
+                    if (currColor != prevColor)
+                    {
+                        prevColor = currColor;
 
-                    Console.WriteLine(message);
+                        if (currColor == '0')
+                        {
+                            drawController.changeColor(1);
+                        }
+                        else if (currColor == '1')
+                        {
+                            drawController.changeColor(2);
+                        }
+                        else if (currColor == '2')
+                        {
+                            drawController.changeColor(3);
+                        }
+                        else
+                        {
+                            Console.WriteLine("else");
+                        }
+                    }
+                    //Console.WriteLine(message);
                 }
                 catch (Exception e)
                 {
