@@ -65,6 +65,10 @@ namespace KinectColorApp
             if (e.Key.ToString() == "R") {
                 drawController.ClearScreen();
             }
+            else if (e.Key >= Key.D1 && e.Key <= Key.D3)
+            {
+                drawController.changeColor(e.Key - Key.D0);
+            }
         }
 
         // Calibration
