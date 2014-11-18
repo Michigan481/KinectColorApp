@@ -22,8 +22,9 @@ namespace KinectColorApp
         {
             InitializeComponent();
             drawController = new DrawController(drawingCanvas);
+
             kinectController = new KinectController(drawController, image1, soundController);
-            galileoController = new GalileoController(drawController, "COM3", 9600);
+            //galileoController = new GalileoController(drawController, "COM3", 9600);
         }
 
         private DrawController drawController;
@@ -47,6 +48,8 @@ namespace KinectColorApp
                     this.sensor.Start();
                 }
             }
+
+            this.KeyDown += new KeyEventHandler(OnKeyDown);
         }
 
         private void Window_Size_Did_Change(object sender, RoutedEventArgs e)
@@ -56,6 +59,18 @@ namespace KinectColorApp
 
             calibrationBorder.Width = drawingGrid.ActualWidth;
             calibrationBorder.Height = drawingGrid.ActualHeight;
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine(e.Key.ToString());
+            if (e.Key.ToString() == "R") {
+                drawController.ClearScreen();
+            }
+            else if (e.Key >= Key.D1 && e.Key <= Key.D3)
+            {
+                drawController.changeColor(e.Key - Key.D0);
+            }
         }
 
         // Calibration
