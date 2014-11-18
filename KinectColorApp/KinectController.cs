@@ -15,7 +15,9 @@ namespace KinectColorApp
     {
         private Image debugImage;
         private DrawController drawController;
+        private SoundController soundController;
 
+        private bool isScreenClear = true;
         private bool isCalibrated = false;
         private bool hasSetDepthThreshold = false;
         private int DepthThreshold = 9000000;
@@ -27,10 +29,11 @@ namespace KinectColorApp
         private int textileWidth;
         private int textileHeight;
 
-        public KinectController(DrawController controller, Image image)
+        public KinectController(DrawController dController, Image image, SoundController sController)
         {
             debugImage = image;
-            drawController = controller;
+            drawController = dController;
+            soundController = sController;
         }
 
         public void Calibrate(int top_left_x, int top_left_y, int bottom_right_x, int bottom_right_y)
@@ -122,8 +125,11 @@ namespace KinectColorApp
                 {
                     Console.WriteLine(this.DepthThreshold);
                     drawPoint(depthFrame, bestDepthIndex, minDepth);
-                }
-                
+                    if (isScreenClear) {
+                        soundController.PlaySound();
+                        isScreenClear = false;
+                    }
+                } 
             }
         }
 
