@@ -21,7 +21,7 @@ namespace KinectColorApp
         public MainWindow()
         {
             InitializeComponent();
-            drawController = new DrawController(drawingCanvas);
+            drawController = new DrawController(drawingCanvas, backgroundImage);
             soundController = new SoundController();
 
             kinectController = new KinectController(drawController, image1, soundController);
@@ -60,6 +60,9 @@ namespace KinectColorApp
 
             calibrationBorder.Width = drawingGrid.ActualWidth;
             calibrationBorder.Height = drawingGrid.ActualHeight;
+
+            backgroundImage.Width = drawingGrid.ActualWidth;
+            backgroundImage.Height = drawingGrid.ActualHeight;
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
