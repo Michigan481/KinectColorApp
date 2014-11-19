@@ -4,22 +4,22 @@ using System.Windows.Media;
 namespace KinectColorApp {
     class SoundController {
         // the SoundPlayer that will play sounds
-        public MediaPlayer soundPlayer;
+        private MediaPlayer soundPlayer;
 
-        public SoundController (MediaPlayer p) {
-            soundPlayer = p;
-            soundPlayer.Open(new uri(@":c/Windows/Media/WheelsOnBus.mp3")); // default to Wheels on the Bus
+        public SoundController () {
+            soundPlayer = new MediaPlayer();
+            soundPlayer.Open(new Uri(@"C:\Users\Public\Music\Sample Music\Kalimba.mp3")); // default to Wheels on the Bus
         }
 
-        public SetSoundLocation (string s) {
-            soundPlayer.Open(new uri(s));
+        public void SetSoundLocation (string s) {
+            soundPlayer.Open(new Uri(s));
         }
 
-        public PlaySound() {
+        public void PlaySound() {
             soundPlayer.Play();
         }
 
-        public StopSound() {
+        public void StopSound() {
             soundPlayer.Stop();
         }
     }

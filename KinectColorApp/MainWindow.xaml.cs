@@ -22,10 +22,10 @@ namespace KinectColorApp
         {
             InitializeComponent();
             drawController = new DrawController(drawingCanvas);
-            soundController = new SoundController(soundPlayer);
+            soundController = new SoundController();
 
             kinectController = new KinectController(drawController, image1, soundController);
-            //galileoController = new GalileoController(drawController, "COM3", 9600);
+            galileoController = new GalileoController(drawController, "COM3", 9600);
         }
 
         private DrawController drawController;
