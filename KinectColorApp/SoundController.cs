@@ -5,6 +5,7 @@ using System.Uri;
 namespace KinectColorApp {
     class SoundController {
         // the SoundPlayer that will play sounds
+<<<<<<< HEAD
         private MediaPlayer wheelsOnBusPlayer;
         private MediaPlayer mcDonaldPlayer;
         
@@ -14,7 +15,7 @@ namespace KinectColorApp {
 
         public SoundController () {
             wheelsOnBusPlayer = new MediaPlayer();
-            wheelsOnBusPlayer.Open(new uri(@":c/Windows/Media/WheelsOnBus.mp3"));
+            wheelsOnBusPlayer.Open(new uri(@":c\Users\Public\Music\Sample Music\Kalimba.mp3"));
 
             mcDonaldPlayer = new MediaPlayer();
             mcDonaldPlayer.Open(new uri(@"path to old mcdonald mp3"));
@@ -29,8 +30,8 @@ namespace KinectColorApp {
             greenEffectPlayer.Open(new uri(@"path to green effect mp3"));
         }
 
-        public SetSoundLocation (string s) {
-            soundPlayer.Open(new uri(s));
+        public void SetSoundLocation (string s) {
+            soundPlayer.Open(new Uri(s));
         }
 
         public PlayWheelsOnBus() {
@@ -53,7 +54,7 @@ namespace KinectColorApp {
             greenEffectPlayer.Play();
         }
 
-        public StopSound() {
+        public void StopSound() {
             soundPlayer.Stop();
         }
     }

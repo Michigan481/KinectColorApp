@@ -13,11 +13,18 @@ namespace KinectColorApp
     class DrawController
     {
         private int color = 1;
-        public Canvas drawingCanvas; 
+        public Canvas drawingCanvas;
+        public Image backgroundImage;
 
-        public DrawController(Canvas canvas)
+        public DrawController(Canvas canvas, Image image)
         {
             drawingCanvas = canvas;
+            backgroundImage = image;
+        }
+
+        public void changeBackground()
+        {
+            backgroundImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString("/Assets/<this_image>.png");
         }
 
         public void changeColor(int new_color)
