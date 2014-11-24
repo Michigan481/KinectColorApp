@@ -17,7 +17,6 @@ namespace KinectColorApp
         private DrawController drawController;
         private SoundController soundController;
 
-        private bool isScreenClear = true;
         private bool isCalibrated = false;
         private bool hasSetDepthThreshold = false;
         private int DepthThreshold = 9000000;
@@ -80,6 +79,8 @@ namespace KinectColorApp
             }
         }
 
+        #region Getting textile touches
+
         private void ParseDepthFrame(DepthImageFrame depthFrame)
         {
             short[] rawDepthData = new short[depthFrame.PixelDataLength];
@@ -125,13 +126,27 @@ namespace KinectColorApp
                 {
                     Console.WriteLine(this.DepthThreshold);
                     drawPoint(depthFrame, bestDepthIndex, minDepth);
-                    if (isScreenClear) {
-                        soundController.PlaySound();
-                        isScreenClear = false;
-                    }
                 } 
             }
         }
+
+        private void drawPoint(DepthImageFrame depthFrame, int depthIndex, int minDepth)
+        {
+            int x_kinect = (int)((depthIndex) % depthFrame.Width);
+            int y_kinect = (int)((depthIndex) / depthFrame.Width);
+
+            double x_ratio = (x_kinect - topLeft.X) / (double)textileWidth;
+            double y_ratio = (y_kinect - topLeft.Y) / (double)textileHeight;
+
+            int x = (int)(x_ratio * drawController.drawingCanvas.Width);
+            int y = (int)(y_ratio * drawController.drawingCanvas.Height);
+
+            drawController.drawEllipseAtPoint(x, y, (DepthThreshold - minDepth));
+        }
+
+        #endregion
+
+        #region Image creation
 
         private byte[] GenerateColoredBytes(DepthImageFrame depthFrame)
         {
@@ -164,23 +179,11 @@ namespace KinectColorApp
             return pixels;
         }
 
-        private void drawPoint(DepthImageFrame depthFrame, int depthIndex, int minDepth)
-        {
-            int x_kinect = (int)((depthIndex) % depthFrame.Width);
-            int y_kinect = (int)((depthIndex) / depthFrame.Width);
-
-            double x_ratio = (x_kinect - topLeft.X) / (double)textileWidth;
-            double y_ratio = (y_kinect - topLeft.Y) / (double)textileHeight;
-
-            int x = (int)(x_ratio * drawController.drawingCanvas.Width);
-            int y = (int)(y_ratio * drawController.drawingCanvas.Height);
-
-            drawController.drawEllipseAtPoint(x, y, (DepthThreshold-minDepth));
-        }
-
         private static byte CalculateIntensityFromDepth(int distance)
         {
             return (byte)(255 - (255 * Math.Max(distance - 800, 0) / 2000));
         }
+
+        #endregion
     }
 }

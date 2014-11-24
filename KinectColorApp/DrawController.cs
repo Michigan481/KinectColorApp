@@ -12,7 +12,11 @@ namespace KinectColorApp
 {
     class DrawController
     {
-        private int color = 1;
+        // File paths for backgrounds
+        const String busPath = @"../../../Assets\Backgrounds\bus.jpg";
+        const String farmPath = @"";
+
+        private Colors color = Colors.Red;
         public Canvas drawingCanvas;
         public Image backgroundImage;
 
@@ -22,12 +26,22 @@ namespace KinectColorApp
             backgroundImage = image;
         }
 
-        public void changeBackground()
+        public void ChangeBackground(Backgrounds new_background)
         {
-            backgroundImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString("/Assets/<this_image>.png");
+            switch (new_background)
+            {
+                case Backgrounds.Bus:
+                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/bus.jpg"));
+                    break;
+                case Backgrounds.Farm:
+                    backgroundImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString(farmPath);
+                    break;
+                default:
+                    break;
+            }
         }
 
-        public void changeColor(int new_color)
+        public void changeColor(Colors new_color)
         {
             color = new_color;
         }
@@ -50,15 +64,15 @@ namespace KinectColorApp
 
             // Change what color we actually make the ellipse:
             // 1: Red, 2: Blue, 3: Green
-            if (color == 1)
+            if (color == Colors.Red)
             {
                 mySolidColorBrush.Color = Color.FromArgb(255, (byte)colorValue, 0, 0);
             }
-            else if (color == 2)
+            else if (color == Colors.Green)
             {
                 mySolidColorBrush.Color = Color.FromArgb(255, 0, (byte)colorValue, 0);
             }
-            else
+            else if (color == Colors.Blue)
             {
                 mySolidColorBrush.Color = Color.FromArgb(255, 0, 0, (byte)colorValue);
             }

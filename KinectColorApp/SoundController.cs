@@ -1,61 +1,67 @@
 using System;
+using System.IO;
 using System.Windows.Media;
-using System.Uri;
 
 namespace KinectColorApp {
     class SoundController {
-        // the SoundPlayer that will play sounds
-<<<<<<< HEAD
-        private MediaPlayer wheelsOnBusPlayer;
-        private MediaPlayer mcDonaldPlayer;
-        
-        private MediaPlayer blueEffectPlayer;
-        private MediaPlayer redEffectPlayer;
-        private MediaPlayer greenEffectPlayer;
+
+        // File paths for sounds
+        const String kalimbaPath = @"../../Resources\Kalimba.mp3";
+        const String busPath = @"../../Resources\Kalimba.mp3";
+        const String farmPath = @"C:\Users\Public\Music\Sample Music\Kalimba.mp3";
+        const String redEffectPath = @"";
+        const String greenEffectPath = @"";
+        const String blueEffectPath = @"";
+
+        private MediaPlayer musicPlayer;
+        private MediaPlayer effectPlayer;
 
         public SoundController () {
-            wheelsOnBusPlayer = new MediaPlayer();
-            wheelsOnBusPlayer.Open(new uri(@":c\Users\Public\Music\Sample Music\Kalimba.mp3"));
+            musicPlayer = new MediaPlayer();
+            musicPlayer.Open(new Uri(kalimbaPath, UriKind.RelativeOrAbsolute));
 
-            mcDonaldPlayer = new MediaPlayer();
-            mcDonaldPlayer.Open(new uri(@"path to old mcdonald mp3"));
-
-            blueEffectPlayer = new MediaPlayer();
-            blueEffectPlayer.Open(new uri(@"path to blue effect mp3"));
-
-            redEffectPlayer = new MediaPlayer();
-            redEffectPlayer.Open(new uri(@"path to red effect mp3"));
-
-            greenEffectPlayer = new MediaPlayer();
-            greenEffectPlayer.Open(new uri(@"path to green effect mp3"));
+            effectPlayer = new MediaPlayer();
+            //effectPlayer.Open(new Uri(redEffectPath));
         }
 
-        public void SetSoundLocation (string s) {
-            soundPlayer.Open(new Uri(s));
+        public void PlayEffect(Colors color)
+        {
+            switch (color)
+            {
+                case Colors.Red:
+                    effectPlayer.Open(new Uri(redEffectPath, UriKind.RelativeOrAbsolute));
+                    break;
+                case Colors.Green:
+                    effectPlayer.Open(new Uri(greenEffectPath, UriKind.RelativeOrAbsolute));
+                    break;
+                case Colors.Blue:
+                    effectPlayer.Open(new Uri(blueEffectPath, UriKind.RelativeOrAbsolute));
+                    break;
+                default:
+                    break;
+            }
+
+            effectPlayer.Play();
         }
 
-        public PlayWheelsOnBus() {
-            wheelsOnBusPlayer.Play();
+        public void PlayMusic(Backgrounds background) {
+            switch (background)
+            {
+                case Backgrounds.Bus:
+                    musicPlayer.Open(new Uri(busPath, UriKind.RelativeOrAbsolute));
+                    break;
+                case Backgrounds.Farm:
+                    musicPlayer.Open(new Uri(farmPath, UriKind.RelativeOrAbsolute));
+                    break;
+                default:
+                    break;
+            }
+
+            musicPlayer.Play();
         }
 
-        public PlayMcDonald() {
-            mcDonaldPlayer.Play();
-        }
-
-        public PlayBlueEffect() {
-            blueEffectPlayer.Play();
-        }
-
-        public PlayRedEffect() {
-            redEffectPlayer.Play();
-        }
-
-        public PlayGreenEffect() {
-            greenEffectPlayer.Play();
-        }
-
-        public void StopSound() {
-            soundPlayer.Stop();
+        public void StopMusic() {
+            musicPlayer.Stop();
         }
     }
 }

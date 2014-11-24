@@ -16,6 +16,9 @@ using Microsoft.Kinect;
 
 namespace KinectColorApp
 {
+    enum Colors {Red, Green, Blue};
+    enum Backgrounds {Bus, Farm};
+
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -25,7 +28,7 @@ namespace KinectColorApp
             soundController = new SoundController();
 
             kinectController = new KinectController(drawController, image1, soundController);
-            galileoController = new GalileoController(drawController, "COM3", 9600);
+            //galileoController = new GalileoController(drawController, "COM3", 9600);
         }
 
         private DrawController drawController;
@@ -51,6 +54,8 @@ namespace KinectColorApp
             }
 
             this.KeyDown += new KeyEventHandler(OnKeyDown);
+            soundController.PlayMusic(Backgrounds.Bus);
+            drawController.ChangeBackground(Backgrounds.Bus);
         }
 
         private void Window_Size_Did_Change(object sender, RoutedEventArgs e)
@@ -73,7 +78,7 @@ namespace KinectColorApp
             }
             else if (e.Key >= Key.D1 && e.Key <= Key.D3)
             {
-                drawController.changeColor(e.Key - Key.D0);
+                drawController.changeColor((Colors)(e.Key - Key.D0));
             }
         }
 

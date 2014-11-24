@@ -5,17 +5,18 @@
         Title="MainWindow" Height="718.178" Width="910.892" Loaded="Window_Loaded" Closing="Window_Closing" SizeChanged="Window_Size_Did_Change">
     <Grid x:Name="drawingGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="214*"/>
-            <ColumnDefinition Width="81*"/>
-            <ColumnDefinition Width="388*"/>
-            <ColumnDefinition Width="1037*"/>
-            <ColumnDefinition Width="195*"/>
+            <ColumnDefinition Width="101*"/>
+            <ColumnDefinition Width="38*"/>
+            <ColumnDefinition Width="183*"/>
+            <ColumnDefinition Width="581*"/>
+            <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
-        <Canvas x:Name="drawingCanvas" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMoved" MouseUp="Canvas_MouseUp" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Grid.ColumnSpan="3">
+        <Image x:Name="backgroundImage" HorizontalAlignment="Left" Height="400" VerticalAlignment="Top" Width="600" Margin="10,10,0,0" Grid.ColumnSpan="4"/>
+
+        <Canvas x:Name="drawingCanvas" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMoved" MouseUp="Canvas_MouseUp" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Grid.ColumnSpan="4">
             <Rectangle x:Name="calibrationBorder" Height="480" Stroke="#FFED00FF" Width="640" StrokeThickness="10"/>
             <Image x:Name="image1" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Canvas.Left="10" Canvas.Top="10"/>
         </Canvas>
-        <Image x:Name="backgroundImage" Grid.ColumnSpan="2" Grid.Column="3" HorizontalAlignment="Left" Height="145" Margin="362.333,305,0,0" VerticalAlignment="Top" Width="181"/>
 
     </Grid>
 </Window>

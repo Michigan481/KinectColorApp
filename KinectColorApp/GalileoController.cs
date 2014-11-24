@@ -51,23 +51,7 @@ namespace KinectColorApp
                     if (currColor != prevColor)
                     {
                         prevColor = currColor;
-
-                        if (currColor == '0')
-                        {
-                            drawController.changeColor(1);
-                        }
-                        else if (currColor == '1')
-                        {
-                            drawController.changeColor(2);
-                        }
-                        else if (currColor == '2')
-                        {
-                            drawController.changeColor(3);
-                        }
-                        else
-                        {
-                            Console.WriteLine("else");
-                        }
+                        drawController.changeColor((Colors)(int)currColor);
                     }
                     //Console.WriteLine(message);
                 }
