@@ -28,13 +28,16 @@ namespace KinectColorApp
 
         public void ChangeBackground(Backgrounds new_background)
         {
+            Console.WriteLine("Changing background to " + new_background);
             switch (new_background)
             {
                 case Backgrounds.Bus:
                     backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/bus.jpg"));
+                    //backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/animal.jpg"));
                     break;
                 case Backgrounds.Farm:
-                    backgroundImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString(farmPath);
+                    Console.WriteLine("Got into farm case");
+                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/animal.jpg"));
                     break;
                 default:
                     break;
