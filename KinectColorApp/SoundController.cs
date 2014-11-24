@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Controls;
 
 namespace KinectColorApp {
     class SoundController {
@@ -13,55 +15,56 @@ namespace KinectColorApp {
         const String greenEffectPath = @"";
         const String blueEffectPath = @"";
 
-        private MediaPlayer musicPlayer;
-        private MediaPlayer effectPlayer;
+        private MediaElement musicPlayer;
 
         public SoundController () {
-            musicPlayer = new MediaPlayer();
-            musicPlayer.Open(new Uri(kalimbaPath, UriKind.RelativeOrAbsolute));
-
-            effectPlayer = new MediaPlayer();
-            //effectPlayer.Open(new Uri(redEffectPath));
-        }
-
-        public void PlayEffect(Colors color)
-        {
-            switch (color)
-            {
-                case Colors.Red:
-                    effectPlayer.Open(new Uri(redEffectPath, UriKind.RelativeOrAbsolute));
-                    break;
-                case Colors.Green:
-                    effectPlayer.Open(new Uri(greenEffectPath, UriKind.RelativeOrAbsolute));
-                    break;
-                case Colors.Blue:
-                    effectPlayer.Open(new Uri(blueEffectPath, UriKind.RelativeOrAbsolute));
-                    break;
-                default:
-                    break;
-            }
-
-            effectPlayer.Play();
+            musicPlayer = new MediaElement();
+            musicPlayer.LoadedBehavior = MediaState.Manual;
+            musicPlayer.UnloadedBehavior = MediaState.Manual;
+            musicPlayer.Source =  new Uri(kalimbaPath, UriKind.RelativeOrAbsolute);
+            musicPlayer.Volume = 0;
         }
 
         public void PlayMusic(Backgrounds background) {
             switch (background)
             {
                 case Backgrounds.Bus:
-                    musicPlayer.Open(new Uri(busPath, UriKind.RelativeOrAbsolute));
+                    musicPlayer.Source = new Uri(busPath, UriKind.RelativeOrAbsolute);
                     break;
                 case Backgrounds.Farm:
-                    musicPlayer.Open(new Uri(farmPath, UriKind.RelativeOrAbsolute));
+                    musicPlayer.Source = new Uri(farmPath, UriKind.RelativeOrAbsolute);
                     break;
                 default:
                     break;
             }
+        }
 
+        public void StartMusic()
+        {
             musicPlayer.Play();
+
+            DoubleAnimation newAnimation = new DoubleAnimation();
+            newAnimation.From = musicPlayer.Volume;
+            newAnimation.To = 0.5;
+            newAnimation.Duration = new System.Windows.Duration(TimeSpan.FromSeconds(5));
+            newAnimation.AutoReverse = false;
+
+            musicPlayer.BeginAnimation(MediaElement.VolumeProperty, newAnimation, HandoffBehavior.SnapshotAndReplace);
         }
 
         public void StopMusic() {
-            musicPlayer.Stop();
+            Console.WriteLine("here");
+            DoubleAnimation newAnimation = new DoubleAnimation();
+            newAnimation.From = musicPlayer.Volume;
+            newAnimation.To = 0.0;
+            newAnimation.Duration = new System.Windows.Duration(TimeSpan.FromSeconds(5));
+            newAnimation.AutoReverse = false;
+            newAnimation.Completed += (s, e) =>
+            {
+                musicPlayer.Pause();
+            };
+
+            musicPlayer.BeginAnimation(MediaElement.VolumeProperty, newAnimation, HandoffBehavior.SnapshotAndReplace);
         }
     }
 }
