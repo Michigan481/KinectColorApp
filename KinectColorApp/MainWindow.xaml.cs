@@ -126,8 +126,8 @@ namespace KinectColorApp
             this.kinectController.Calibrate((int)startPoint.X - 10, (int)startPoint.Y - 10, (int)endPoint.X - 10, (int)endPoint.Y - 10);
 
             this.calibrationBorder.Visibility = Visibility.Hidden;
-            //this.image1.Visibility = Visibility.Hidden;
-            //rect.Visibility = Visibility.Hidden;
+            this.image1.Visibility = Visibility.Hidden;
+            rect.Visibility = Visibility.Hidden;
             rect = null;
         }
 
