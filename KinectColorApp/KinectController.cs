@@ -46,6 +46,12 @@ namespace KinectColorApp
 
         public void SensorAllFramesReady(object sender, AllFramesReadyEventArgs e)
         {
+            // Check if we need to change background
+            if (drawController.background != Backgrounds.AlreadySet)
+            {
+                drawController.ChangeBackground(drawController.background);
+            }
+
             using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
             {
                 if (depthFrame == null)

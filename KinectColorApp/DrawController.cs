@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Threading;
 
 namespace KinectColorApp
 {
@@ -17,8 +18,10 @@ namespace KinectColorApp
         const String farmPath = @"";
 
         private Colors color = Colors.Red;
+        public Backgrounds background = Backgrounds.AlreadySet;
         public Canvas drawingCanvas;
         public Image backgroundImage;
+
 
         public DrawController(Canvas canvas, Image image)
         {
@@ -26,22 +29,38 @@ namespace KinectColorApp
             backgroundImage = image;
         }
 
+        public void setBackgroundFlag(Backgrounds new_background)
+        {
+            background = new_background;
+        }
+
+
         public void ChangeBackground(Backgrounds new_background)
         {
             Console.WriteLine("Changing background to " + new_background);
+
+            background = Backgrounds.AlreadySet;
+
+            // Create new bitmap image:
+            //BitmapImage bitmap = new BitmapImage();
+            //bitmap.BeginInit();
+            
             switch (new_background)
             {
                 case Backgrounds.Bus:
+                    //bitmap.UriSource = new Uri("pack://application:,,,/Resources/bus.jpg");
                     backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/bus.jpg"));
-                    //backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/animal.jpg"));
                     break;
                 case Backgrounds.Farm:
                     Console.WriteLine("Got into farm case");
+                    //bitmap.UriSource = new Uri("pack://application:,,,/Resources/animal.jpg");
                     backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/animal.jpg"));
                     break;
                 default:
                     break;
             }
+            //bitmap.EndInit();
+
         }
 
         public void changeColor(Colors new_color)

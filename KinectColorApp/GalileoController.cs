@@ -69,7 +69,8 @@ namespace KinectColorApp
                             prevBackground = currBackground;
                             int backgroundNum = currBackground - '3';
                             // need to subtract 3 to make it 0-indexed
-                            drawController.ChangeBackground((Backgrounds)backgroundNum);
+                            
+                            this.drawController.setBackgroundFlag((Backgrounds)backgroundNum);
                         }
 
                     }

@@ -17,7 +17,7 @@ using Microsoft.Kinect;
 namespace KinectColorApp
 {
     enum Colors {Red, Green, Blue};
-    enum Backgrounds {Bus, Farm};
+    enum Backgrounds {Bus, Farm, AlreadySet};
 
     public partial class MainWindow : Window
     {
@@ -28,7 +28,7 @@ namespace KinectColorApp
             soundController = new SoundController();
 
             kinectController = new KinectController(drawController, image1, soundController);
-            //galileoController = new GalileoController(drawController, "COM3", 9600);
+            galileoController = new GalileoController(drawController, "COM3", 9600);
         }
 
         private DrawController drawController;
