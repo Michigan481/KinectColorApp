@@ -85,11 +85,11 @@ namespace KinectColorApp
             myEllipse.Stroke = Brushes.Black;
 
             // Set the width and height of the Ellipse.
-            myEllipse.Width = 40;
-            myEllipse.Height = 40;
+            myEllipse.Width = 30;
+            myEllipse.Height = 30;
 
-            Canvas.SetTop(myEllipse, y);
-            Canvas.SetLeft(myEllipse, x);
+            Canvas.SetTop(myEllipse, y - myEllipse.Height/2);
+            Canvas.SetLeft(myEllipse, x - myEllipse.Width/2);
 
             // Add the Ellipse to the StackPanel.
             drawingCanvas.Children.Add(myEllipse);
