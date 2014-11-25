@@ -56,7 +56,8 @@ namespace KinectColorApp
                         if (currColor != prevColor)
                         {
                             prevColor = currColor;
-                            drawController.changeColor((Colors)(int)currColor);
+                            int colorNum = currColor - '0';
+                            drawController.changeColor((Colors)colorNum);
                         }
                         //Console.WriteLine(message);
                     }

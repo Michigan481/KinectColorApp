@@ -111,7 +111,8 @@ namespace KinectColorApp
             var y = Math.Min(pos.Y, startPoint.Y);
 
             var w = Math.Max(pos.X, startPoint.X) - x;
-            var h = Math.Max(pos.Y, startPoint.Y) - y;
+            var h = 0.75 * w;
+            //var h = Math.Max(pos.Y, startPoint.Y) - y;
 
             rect.Width = w;
             rect.Height = h;
@@ -123,7 +124,7 @@ namespace KinectColorApp
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
             Point endPoint = e.GetPosition(drawingCanvas);
-            this.kinectController.Calibrate((int)startPoint.X - 10, (int)startPoint.Y - 10, (int)endPoint.X - 10, (int)endPoint.Y - 10);
+            this.kinectController.Calibrate((int)startPoint.X - 10, (int)startPoint.Y - 10, (int)(startPoint.X + rect.Width - 10), (int)(startPoint.Y + rect.Height - 10));
 
             this.calibrationBorder.Visibility = Visibility.Hidden;
             this.image1.Visibility = Visibility.Hidden;

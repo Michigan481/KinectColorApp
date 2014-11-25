@@ -81,8 +81,9 @@ namespace KinectColorApp
             // Each value has a range of 0-255.
             //Console.WriteLine(depth);
 
-            int colorValue = (int) (255 * (depth / 170.0));
+            int colorValue = (int) (255 * (1 - (depth / 100.0)));
             if (colorValue < 0) colorValue = 0;
+            if (colorValue > 255) colorValue = 255;
 
             // Change what color we actually make the ellipse:
             // 1: Red, 2: Blue, 3: Green
@@ -104,8 +105,8 @@ namespace KinectColorApp
             myEllipse.Stroke = Brushes.Black;
 
             // Set the width and height of the Ellipse.
-            myEllipse.Width = 30;
-            myEllipse.Height = 30;
+            myEllipse.Width = 20;
+            myEllipse.Height = 20;
 
             Canvas.SetTop(myEllipse, y - myEllipse.Height/2);
             Canvas.SetLeft(myEllipse, x - myEllipse.Width/2);

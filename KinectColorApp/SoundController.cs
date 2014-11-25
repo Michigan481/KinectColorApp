@@ -46,7 +46,7 @@ namespace KinectColorApp {
             DoubleAnimation newAnimation = new DoubleAnimation();
             newAnimation.From = musicPlayer.Volume;
             newAnimation.To = 0.5;
-            newAnimation.Duration = new System.Windows.Duration(TimeSpan.FromSeconds(5));
+            newAnimation.Duration = new System.Windows.Duration(TimeSpan.FromSeconds(2));
             newAnimation.AutoReverse = false;
 
             musicPlayer.BeginAnimation(MediaElement.VolumeProperty, newAnimation, HandoffBehavior.SnapshotAndReplace);

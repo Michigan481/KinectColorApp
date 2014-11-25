@@ -150,7 +150,11 @@ namespace KinectColorApp
             int y_kinect = (int)((depthIndex) / depthFrame.Width);
 
             double x_ratio = (x_kinect - topLeft.X) / (double)textileWidth;
+
+            // Fixing right side being offset for some reason
             x_ratio = (1 - x_ratio);
+            if (x_ratio > 0.5) x_ratio -= 0.05;
+
             double y_ratio = (y_kinect - topLeft.Y) / (double)textileHeight;
 
             int x = (int)(x_ratio * drawController.drawingCanvas.Width);
