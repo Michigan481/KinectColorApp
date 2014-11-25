@@ -81,6 +81,8 @@ namespace KinectColorApp
 
         #region Getting textile touches
 
+        bool gotTouch = false;
+
         private void ParseDepthFrame(DepthImageFrame depthFrame)
         {
             short[] rawDepthData = new short[depthFrame.PixelDataLength];
@@ -124,9 +126,15 @@ namespace KinectColorApp
                 }
                 else
                 {
-                    Console.WriteLine(this.DepthThreshold);
+                    soundController.StartMusic();
                     drawPoint(depthFrame, bestDepthIndex, minDepth);
+                    gotTouch = true;
                 } 
+            }
+            else
+            {
+                if (gotTouch == true) soundController.StopMusic();
+                gotTouch = false;
             }
         }
 
