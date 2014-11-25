@@ -14,7 +14,7 @@ int pinSize = 5;
 int threshold[] = {25, 25, 25, 25, 25};
 int sensorPin[] = {A0, A1, A2, A4, A5};    // select the input pin for the potentiometer
 int sensorValue[] = {0, 0, 0, 0, 0};  // variable to store the value coming from the sensor
-int pinIndex[] = {0, 1, 2, 3, 4};    // variable to indicate the pin index
+int pinIndex[] = {0, 1, 2, 4, 5};    // variable to indicate the pin index
 
 void setup() {
   // initialize serial communications at 9600 bps:
