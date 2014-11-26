@@ -14,7 +14,7 @@ namespace KinectColorApp
     class DrawController
     {
         // File paths for backgrounds
-        const String busPath = @"../../../Assets\Backgrounds\bus.jpg";
+        const String busPath = @"../../../Assets\Backgrounds\bus.png";
         const String farmPath = @"";
 
         private Colors color = Colors.Red;
@@ -49,12 +49,12 @@ namespace KinectColorApp
             {
                 case Backgrounds.Bus:
                     //bitmap.UriSource = new Uri("pack://application:,,,/Resources/bus.jpg");
-                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/bus.jpg"));
+                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/bus.png"));
                     break;
                 case Backgrounds.Farm:
                     Console.WriteLine("Got into farm case");
                     //bitmap.UriSource = new Uri("pack://application:,,,/Resources/animal.jpg");
-                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/animal.jpg"));
+                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/animal.png"));
                     break;
                 default:
                     break;
@@ -89,15 +89,15 @@ namespace KinectColorApp
             // 1: Red, 2: Blue, 3: Green
             if (color == Colors.Red)
             {
-                mySolidColorBrush.Color = Color.FromArgb(255, (byte)colorValue, 0, 0);
+                mySolidColorBrush.Color = Color.FromArgb(100, (byte)colorValue, 0, 0);
             }
             else if (color == Colors.Green)
             {
-                mySolidColorBrush.Color = Color.FromArgb(255, 0, (byte)colorValue, 0);
+                mySolidColorBrush.Color = Color.FromArgb(100, 0, (byte)colorValue, 0);
             }
             else if (color == Colors.Blue)
             {
-                mySolidColorBrush.Color = Color.FromArgb(255, 0, 0, (byte)colorValue);
+                mySolidColorBrush.Color = Color.FromArgb(100, 0, 0, (byte)colorValue);
             }
 
             myEllipse.Fill = mySolidColorBrush;
@@ -110,6 +110,7 @@ namespace KinectColorApp
 
             Canvas.SetTop(myEllipse, y - myEllipse.Height/2);
             Canvas.SetLeft(myEllipse, x - myEllipse.Width/2);
+            Canvas.SetZIndex(myEllipse, 0);
 
             // Add the Ellipse to the StackPanel.
             drawingCanvas.Children.Add(myEllipse);

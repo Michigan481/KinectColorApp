@@ -106,13 +106,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\bus.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Kalimba.mp3" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\animal.jpg" />
+    <Resource Include="Resources\animal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\bus.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

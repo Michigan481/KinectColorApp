@@ -130,6 +130,8 @@ namespace KinectColorApp
             this.image1.Visibility = Visibility.Hidden;
             rect.Visibility = Visibility.Hidden;
             rect = null;
+
+            Canvas.SetZIndex(backgroundImage, 1);
         }
 
         void StopKinect(KinectSensor sensor)
