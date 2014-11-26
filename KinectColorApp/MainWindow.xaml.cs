@@ -17,7 +17,7 @@ using Microsoft.Kinect;
 namespace KinectColorApp
 {
     enum Colors {Red, Green, Blue};
-    enum Backgrounds {Bus, Farm, AlreadySet};
+    enum Backgrounds {Farm, Pokemon, Turtle, AlreadySet};
 
     public partial class MainWindow : Window
     {
@@ -54,8 +54,8 @@ namespace KinectColorApp
             }
 
             this.KeyDown += new KeyEventHandler(OnKeyDown);
-            soundController.PlayMusic(Backgrounds.Bus);
-            drawController.ChangeBackground(Backgrounds.Bus);
+            soundController.PlayMusic(Backgrounds.Farm);
+            drawController.ChangeBackground(Backgrounds.Farm);
         }
 
         private void Window_Size_Did_Change(object sender, RoutedEventArgs e)

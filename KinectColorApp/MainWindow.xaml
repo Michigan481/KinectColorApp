@@ -14,8 +14,8 @@
 
         <Canvas x:Name="drawingCanvas" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMoved" MouseUp="Canvas_MouseUp" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Grid.ColumnSpan="4">
             <Rectangle x:Name="calibrationBorder" Height="480" Stroke="#FFED00FF" Width="640" StrokeThickness="10"/>
-            <Image x:Name="image1" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Canvas.Left="10" Canvas.Top="10"/>
             <Image x:Name="backgroundImage" HorizontalAlignment="Left" Height="400" VerticalAlignment="Top" Width="600" Canvas.Top="10"/>
+            <Image x:Name="image1" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Canvas.Left="10" Canvas.Top="10"/>
         </Canvas>
 
     </Grid>

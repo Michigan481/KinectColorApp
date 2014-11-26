@@ -17,10 +17,14 @@ namespace KinectColorApp
         int baudRate;
         bool _continue;
         char prevColor = '0';
-        char prevBackground = '3';
+        int prevBackground = 0;
+        int maxBackground = 3;
+
+        DateTime lastTime;
 
         public GalileoController(DrawController dc, string pN, int bR)
         {
+            lastTime = DateTime.Now;
             drawController = dc;
             portName = pN;
             baudRate = bR;
@@ -62,17 +66,23 @@ namespace KinectColorApp
                         //Console.WriteLine(message);
                     }
                     // Change background:
-                    else if (message[0] == '3' || message[0] == '4')
+                    else if (message[0] == '3')
                     {
-                        char currBackground = message[0];
-                        if (currBackground != prevBackground)
+                        TimeSpan timeDiff = DateTime.Now - lastTime;
+
+                        if (timeDiff.TotalMilliseconds > 1000)
                         {
+                            int currBackground = prevBackground + 1;
+                            if (currBackground == maxBackground)
+                            {
+                                currBackground = 0;
+                            }
+
                             prevBackground = currBackground;
-                            int backgroundNum = currBackground - '3';
-                            // need to subtract 3 to make it 0-indexed
-                            
-                            this.drawController.setBackgroundFlag((Backgrounds)backgroundNum);
+                            this.drawController.setBackgroundFlag((Backgrounds)currBackground);
+                            lastTime = DateTime.Now;
                         }
+                        //Thread.Sleep(2000);
 
                     }
                 }

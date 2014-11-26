@@ -28,10 +28,10 @@ namespace KinectColorApp {
         public void PlayMusic(Backgrounds background) {
             switch (background)
             {
-                case Backgrounds.Bus:
+                case Backgrounds.Farm:
                     musicPlayer.Source = new Uri(busPath, UriKind.RelativeOrAbsolute);
                     break;
-                case Backgrounds.Farm:
+                case Backgrounds.Pokemon:
                     musicPlayer.Source = new Uri(farmPath, UriKind.RelativeOrAbsolute);
                     break;
                 default:

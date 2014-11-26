@@ -47,15 +47,21 @@ namespace KinectColorApp
             
             switch (new_background)
             {
-                case Backgrounds.Bus:
-                    //bitmap.UriSource = new Uri("pack://application:,,,/Resources/bus.jpg");
-                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/bus.png"));
-                    break;
                 case Backgrounds.Farm:
-                    Console.WriteLine("Got into farm case");
-                    //bitmap.UriSource = new Uri("pack://application:,,,/Resources/animal.jpg");
+                    //bitmap.UriSource = new Uri("pack://application:,,,/Resources/bus.jpg");
                     backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/animal.png"));
                     break;
+                case Backgrounds.Pokemon:
+                    Console.WriteLine("Got into pokemon case");
+                    //bitmap.UriSource = new Uri("pack://application:,,,/Resources/animal.jpg");
+                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/pokemon.png"));
+                    break;
+                case Backgrounds.Turtle:
+                    Console.WriteLine("Got into turtle case");
+                    //bitmap.UriSource = new Uri("pack://application:,,,/Resources/animal.jpg");
+                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/turtle.png"));
+                    break;
+
                 default:
                     break;
             }
