@@ -11,7 +11,7 @@
 
  */
 int pinSize = 5;
-int threshold[] = {25, 25, 25, 25, 25};
+int threshold = 5；
 int sensorPin[] = {A0, A1, A2, A4, A5};    // select the input pin for the potentiometer
 int sensorValue[] = {0, 0, 0, 0, 0};  // variable to store the value coming from the sensor
 int pinIndex[] = {0, 1, 2, 4, 5};    // variable to indicate the pin index
@@ -32,7 +32,7 @@ void loop() {
   // check every pin to see which pin has analog input
   for (int i = 0; i < pinSize; i++) {
     // if touch input is obvious enough, print out the corresponding pin index
-    if (sensorValue[i]>=threshold[i]) {
+    if (sensorValue[i]>=threshold) {
       Serial.println(pinIndex[i]); 
     }
   }
