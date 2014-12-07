@@ -53,9 +53,9 @@ namespace KinectColorApp
                     string message = port.ReadLine();
                     Console.WriteLine("MESSAGE IS: " + message[0]);
                     // Change color:
-                    if (message[0] == '0' || message[0] == '1' || message[0] == '2')
+                    if (message[0] == '0' || message[0] == '1' || message[0] == '2' || message[0] == '4')
                     {
-                        char currColor = message[0];
+                        char currColor = (message[0] == '4' ? '3' : message[0]);
                         //Console.WriteLine("msg: " + currColor);
                         if (currColor != prevColor)
                         {

@@ -1,4 +1,4 @@
-/*
+﻿/*
   Analog Input
  Read analog input from five analog pins
  As long as there is sensor input from a pin whose value is larger than a limit,
@@ -11,7 +11,7 @@
 
  */
 int pinSize = 5;
-int threshold = 5；
+int threshold = 5;
 int sensorPin[] = {A0, A1, A2, A4, A5};    // select the input pin for the potentiometer
 int sensorValue[] = {0, 0, 0, 0, 0};  // variable to store the value coming from the sensor
 int pinIndex[] = {0, 1, 2, 4, 5};    // variable to indicate the pin index
