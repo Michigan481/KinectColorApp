@@ -24,6 +24,10 @@ namespace KinectColorApp
         public MainWindow()
         {
             InitializeComponent();
+            drawingCanvas.Width = drawingGrid.ActualWidth;
+            drawingCanvas.Height = drawingCanvas.Width * (3.0 / 4.0);
+            backgroundImage.Width = drawingGrid.ActualWidth;
+            backgroundImage.Height = drawingGrid.ActualHeight;
             drawController = new DrawController(drawingCanvas, backgroundImage);
             soundController = new SoundController();
 
@@ -61,13 +65,13 @@ namespace KinectColorApp
         private void Window_Size_Did_Change(object sender, RoutedEventArgs e)
         {
             drawingCanvas.Width = drawingGrid.ActualWidth;
-            drawingCanvas.Height = drawingGrid.ActualHeight;
+            drawingCanvas.Height = drawingCanvas.Width * (3.0 / 4.0);
 
             calibrationBorder.Width = drawingGrid.ActualWidth;
-            calibrationBorder.Height = drawingGrid.ActualHeight;
+            calibrationBorder.Height = calibrationBorder.Width*(3.0/4.0);
 
-            backgroundImage.Width = drawingGrid.ActualWidth;
-            backgroundImage.Height = drawingGrid.ActualHeight;
+            backgroundImage.Width = drawingGrid.ActualWidth - 40;
+            backgroundImage.Height = drawingGrid.ActualHeight - 40;
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
@@ -124,6 +128,7 @@ namespace KinectColorApp
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
             Point endPoint = e.GetPosition(drawingCanvas);
+            Console.WriteLine(rect.Height);
             this.kinectController.Calibrate((int)startPoint.X - 10, (int)startPoint.Y - 10, (int)(startPoint.X + rect.Width - 10), (int)(startPoint.Y + rect.Height - 10));
 
             this.calibrationBorder.Visibility = Visibility.Hidden;

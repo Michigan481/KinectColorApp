@@ -33,6 +33,15 @@ namespace KinectColorApp
             debugImage = image;
             drawController = dController;
             soundController = sController;
+
+            //double x = (1 * drawController.drawingCanvas.Width);
+            //double y = (1 * drawController.drawingCanvas.Height);
+            //drawController.drawEllipseAtPoint(x, y, 0);
+
+            //x = (0 * drawController.drawingCanvas.Width);
+            //y = (0 * drawController.drawingCanvas.Height);
+            //drawController.changeColor(Colors.Green);
+            //drawController.drawEllipseAtPoint(x, y, 40);
         }
 
         public void Calibrate(int top_left_x, int top_left_y, int bottom_right_x, int bottom_right_y)
@@ -41,6 +50,8 @@ namespace KinectColorApp
             bottomRight = new Point(bottom_right_x, bottom_right_y);
             textileWidth = bottom_right_x - top_left_x;
             textileHeight = bottom_right_y - top_left_y;
+
+            Console.WriteLine(textileHeight);
             this.isCalibrated = true;
         }
 
@@ -146,21 +157,22 @@ namespace KinectColorApp
 
         private void drawPoint(DepthImageFrame depthFrame, int depthIndex, int minDepth)
         {
-            int x_kinect = (int)((depthIndex) % depthFrame.Width);
-            int y_kinect = (int)((depthIndex) / depthFrame.Width);
+            double x_kinect = (depthIndex % depthFrame.Width);
+            double y_kinect = (depthIndex / depthFrame.Width);
 
-            double x_ratio = (x_kinect - topLeft.X) / (double)textileWidth;
-
-            // Fixing right side being offset for some reason
+            double x_ratio = (x_kinect - topLeft.X - 25) / (double)(textileWidth + 50);
             x_ratio = (1 - x_ratio);
-            if (x_ratio > 0.5) x_ratio -= 0.05;
+            double y_ratio = (y_kinect - topLeft.Y + 20) / (double)(textileHeight + 30);
 
-            double y_ratio = (y_kinect - topLeft.Y) / (double)textileHeight;
-
-            int x = (int)(x_ratio * drawController.drawingCanvas.Width);
-            int y = (int)(y_ratio * drawController.drawingCanvas.Height);
+            double x = (x_ratio * drawController.drawingCanvas.Width) - 80;
+            double y = (y_ratio * drawController.drawingCanvas.Height);
 
             drawController.drawEllipseAtPoint(x, y, (DepthThreshold - minDepth));
+
+            drawController.drawEllipseAtPoint(0, 0, 10);
+            drawController.drawEllipseAtPoint(drawController.drawingCanvas.Width, drawController.drawingCanvas.Height, 10);
+            Console.WriteLine(drawController.drawingCanvas.Width);
+            Console.WriteLine(drawController.drawingCanvas.Height);
         }
 
         #endregion

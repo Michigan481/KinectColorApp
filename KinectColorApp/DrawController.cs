@@ -72,7 +72,7 @@ namespace KinectColorApp
             color = new_color;
         }
 
-        public void drawEllipseAtPoint(int x, int y, int depth)
+        public void drawEllipseAtPoint(double x, double y, int depth)
         {
             // Create a red Ellipse.
             Ellipse myEllipse = new Ellipse();
