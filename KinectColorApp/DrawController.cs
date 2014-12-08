@@ -85,7 +85,8 @@ namespace KinectColorApp
             // Each value has a range of 0-255.
             //Console.WriteLine(depth);
 
-            int colorValue = (int) (255 * (1 - (depth / 100.0)));
+            //int colorValue = (int) (255 * (1 - (depth / 100.0)));
+            int colorValue = (int)(255 * (depth / 100.0));
             if (colorValue < 0) colorValue = 0;
             if (colorValue > 255) colorValue = 255;
 
@@ -93,19 +94,19 @@ namespace KinectColorApp
             // 1: Red, 2: Blue, 3: Green
             if (color == Colors.Red)
             {
-                mySolidColorBrush.Color = Color.FromArgb(100, (byte)colorValue, 0, 0);
+                mySolidColorBrush.Color = Color.FromArgb(100, 255, (byte)colorValue, 0);
             }
             else if (color == Colors.Green)
             {
-                mySolidColorBrush.Color = Color.FromArgb(100, 0, (byte)colorValue, 0);
+                mySolidColorBrush.Color = Color.FromArgb(100, 0, 255, (byte)colorValue);
             }
             else if (color == Colors.Blue)
             {
-                mySolidColorBrush.Color = Color.FromArgb(100, 0, 0, (byte)colorValue);
+                mySolidColorBrush.Color = Color.FromArgb(100, (byte)colorValue, 0, 255);
             }
             else if (color == Colors.White) 
             {
-                mySolidColorBrush.Color = Color.FromArgb(100, 255, 255, 255);
+                mySolidColorBrush.Color = Color.FromArgb(255, 255, 255, 255);
             }
 
             myEllipse.Fill = mySolidColorBrush;

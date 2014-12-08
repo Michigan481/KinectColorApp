@@ -168,11 +168,6 @@ namespace KinectColorApp
             double y = (y_ratio * drawController.drawingCanvas.Height);
 
             drawController.drawEllipseAtPoint(x, y, (DepthThreshold - minDepth));
-
-            drawController.drawEllipseAtPoint(0, 0, 10);
-            drawController.drawEllipseAtPoint(drawController.drawingCanvas.Width, drawController.drawingCanvas.Height, 10);
-            Console.WriteLine(drawController.drawingCanvas.Width);
-            Console.WriteLine(drawController.drawingCanvas.Height);
         }
 
         #endregion
