@@ -40,10 +40,6 @@ namespace KinectColorApp
             Console.WriteLine("Changing background to " + new_background);
 
             background = Backgrounds.AlreadySet;
-
-            // Create new bitmap image:
-            //BitmapImage bitmap = new BitmapImage();
-            //bitmap.BeginInit();
             
             switch (new_background)
             {
@@ -65,7 +61,9 @@ namespace KinectColorApp
                 default:
                     break;
             }
-            //bitmap.EndInit();
+
+            // And, in any case, clear screen:
+            ClearScreen();
 
         }
 
@@ -104,6 +102,10 @@ namespace KinectColorApp
             else if (color == Colors.Blue)
             {
                 mySolidColorBrush.Color = Color.FromArgb(100, 0, 0, (byte)colorValue);
+            }
+            else if (color == Colors.White) 
+            {
+                mySolidColorBrush.Color = Color.FromArgb(100, 255, 255, 255);
             }
 
             myEllipse.Fill = mySolidColorBrush;

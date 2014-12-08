@@ -16,7 +16,7 @@ using Microsoft.Kinect;
 
 namespace KinectColorApp
 {
-    enum Colors {Red, Green, Blue};
+    enum Colors {Red, Green, Blue, White};
     enum Backgrounds {Farm, Pokemon, Turtle, AlreadySet};
 
     public partial class MainWindow : Window
