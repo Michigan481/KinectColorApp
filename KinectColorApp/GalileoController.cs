@@ -17,8 +17,6 @@ namespace KinectColorApp
         int baudRate;
         bool _continue;
         char prevColor = '0';
-        int prevBackground = 0;
-        int maxBackground = 3;
 
         DateTime lastTime;
 
@@ -61,7 +59,7 @@ namespace KinectColorApp
                         {
                             prevColor = currColor;
                             int colorNum = currColor - '0';
-                            drawController.changeColor((Colors)colorNum);
+                            drawController.ChangeColor((Colors)colorNum);
                         }
                         //Console.WriteLine(message);
                     }
@@ -72,18 +70,9 @@ namespace KinectColorApp
 
                         if (timeDiff.TotalMilliseconds > 1000)
                         {
-                            int currBackground = prevBackground + 1;
-                            if (currBackground == maxBackground)
-                            {
-                                currBackground = 0;
-                            }
-
-                            prevBackground = currBackground;
-                            this.drawController.setBackgroundFlag((Backgrounds)currBackground);
+                            drawController.CycleBackgrounds();
                             lastTime = DateTime.Now;
                         }
-                        //Thread.Sleep(2000);
-
                     }
                 }
                 catch (Exception e)

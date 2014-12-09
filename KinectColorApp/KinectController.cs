@@ -144,7 +144,7 @@ namespace KinectColorApp
                 else
                 {
                     soundController.StartMusic();
-                    drawPoint(depthFrame, bestDepthIndex, minDepth);
+                    DrawPoint(depthFrame, bestDepthIndex, minDepth);
                     gotTouch = true;
                 } 
             }
@@ -155,7 +155,7 @@ namespace KinectColorApp
             }
         }
 
-        private void drawPoint(DepthImageFrame depthFrame, int depthIndex, int minDepth)
+        private void DrawPoint(DepthImageFrame depthFrame, int depthIndex, int minDepth)
         {
             double x_kinect = (depthIndex % depthFrame.Width);
             double y_kinect = (depthIndex / depthFrame.Width);
@@ -167,7 +167,7 @@ namespace KinectColorApp
             double x = (x_ratio * drawController.drawingCanvas.Width) - 80;
             double y = (y_ratio * drawController.drawingCanvas.Height);
 
-            drawController.drawEllipseAtPoint(x, y, (DepthThreshold - minDepth));
+            drawController.DrawEllipseAtPoint(x, y, (DepthThreshold - minDepth));
         }
 
         #endregion

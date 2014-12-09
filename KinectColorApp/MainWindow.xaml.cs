@@ -70,6 +70,9 @@ namespace KinectColorApp
             calibrationBorder.Width = drawingGrid.ActualWidth;
             calibrationBorder.Height = calibrationBorder.Width*(3.0/4.0);
 
+            drawBorder.Width = drawingGrid.ActualWidth;
+            drawBorder.Height = drawBorder.Width * (3.0 / 4.0);
+
             backgroundImage.Width = drawingGrid.ActualWidth - 40;
             backgroundImage.Height = drawingGrid.ActualHeight - 40;
         }
@@ -80,9 +83,13 @@ namespace KinectColorApp
             if (e.Key.ToString() == "R") {
                 drawController.ClearScreen();
             }
+            else if (e.Key.ToString() == "B")
+            {
+                drawController.CycleBackgrounds();
+            }
             else if (e.Key >= Key.D0 && e.Key <= Key.D3)
             {
-                drawController.changeColor((Colors)(e.Key - Key.D0));
+                drawController.ChangeColor((Colors)(e.Key - Key.D0));
             }
         }
 
@@ -136,7 +143,8 @@ namespace KinectColorApp
             rect.Visibility = Visibility.Hidden;
             rect = null;
 
-            Canvas.SetZIndex(backgroundImage, 1);
+            Canvas.SetZIndex(backgroundImage, 2);
+            Canvas.SetZIndex(drawBorder, 1);
         }
 
         void StopKinect(KinectSensor sensor)
