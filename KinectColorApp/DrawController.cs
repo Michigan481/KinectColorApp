@@ -16,8 +16,10 @@ namespace KinectColorApp
     {
         private Colors color = Colors.Red;
         public Backgrounds background = Backgrounds.AlreadySet;
+        public int shouldChangeColor = -1;
 
         int prevBackground = 0;
+        
         public Canvas drawingCanvas;
         public Image backgroundImage;
         public Rectangle colorRect;
@@ -39,6 +41,11 @@ namespace KinectColorApp
 
             prevBackground = currBackground;
             background = (Backgrounds)currBackground;
+        }
+
+        public void ColorChangeFlag(int new_color)
+        {
+            shouldChangeColor = new_color;
         }
 
 
@@ -81,6 +88,9 @@ namespace KinectColorApp
         public void ChangeColor(Colors new_color)
         {
             color = new_color;
+            
+            // Reset shouldChangeColor:
+            shouldChangeColor = -1;
 
             // Change colorRects color:
             LinearGradientBrush gradientBrush = new LinearGradientBrush();
@@ -110,7 +120,6 @@ namespace KinectColorApp
             
 
             colorRect.Fill = gradientBrush;
-
         }
 
         public void DrawEllipseAtPoint(double x, double y, int depth)

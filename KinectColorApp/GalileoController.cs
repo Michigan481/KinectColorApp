@@ -59,7 +59,7 @@ namespace KinectColorApp
                         {
                             prevColor = currColor;
                             int colorNum = currColor - '0';
-                            drawController.ChangeColor((Colors)colorNum);
+                            drawController.ColorChangeFlag(colorNum);
                         }
                         //Console.WriteLine(message);
                     }
