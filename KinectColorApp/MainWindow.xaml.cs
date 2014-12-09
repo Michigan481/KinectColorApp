@@ -60,7 +60,7 @@ namespace KinectColorApp
 
 
             this.KeyDown += new KeyEventHandler(OnKeyDown);
-            soundController.PlayMusic(Backgrounds.Farm);
+            soundController.StartMusic();
             drawController.ChangeBackground(Backgrounds.Farm);
             drawController.ChangeColor(Colors.Red);
 

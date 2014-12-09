@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Controls;
+using System.Media;
 
 namespace KinectColorApp {
     class SoundController {
@@ -24,18 +25,20 @@ namespace KinectColorApp {
             musicPlayer = new MediaElement();
             musicPlayer.LoadedBehavior = MediaState.Manual;
             musicPlayer.UnloadedBehavior = MediaState.Manual;
+            musicPlayer.MediaEnded += Media_Ended;
             effectPlayer = new SoundPlayer();
             musicPlayer.Source =  new Uri(kalimbaPath, UriKind.RelativeOrAbsolute);
             musicPlayer.Volume = 0;
         }
 
+        private void Media_Ended(object sender, EventArgs e)
+        {
+            musicPlayer.Position = TimeSpan.Zero;
+            musicPlayer.Play();
+        }
+
         public void StartMusic()
         {
-            if (musicPlayer.CurrentState == MediaElementState.Stopped) {
-                // loop only when it is music and the playback has reached its end
-                musicPlayer.position = TimeSpan.zero;
-            }
-
             musicPlayer.Play();
 
             DoubleAnimation newAnimation = new DoubleAnimation();
@@ -62,33 +65,33 @@ namespace KinectColorApp {
         }
 
         public void TriggerRedEffect() {
-            effectPlayer.stop();
+            effectPlayer.Stop();
             effectPlayer.SoundLocation = redEffectPath;
-            effectPlayer.play();
+            effectPlayer.Play();
         }
 
         public void TriggerGreenEffect() {
-            effectPlayer.stop();
+            effectPlayer.Stop();
             effectPlayer.SoundLocation = greenEffectPath;
-            effectPlayer.play();
+            effectPlayer.Play();
         }
 
         public void TriggerBlueEffect() {
-            effectPlayer.stop();
+            effectPlayer.Stop();
             effectPlayer.SoundLocation = blueEffectPath;
-            effectPlayer.play();
+            effectPlayer.Play();
         }
 
         public void TriggerBackgroundEffect() {
-            effectPlayer.stop();
+            effectPlayer.Stop();
             effectPlayer.SoundLocation = backgroundEffectPath;
-            effectPlayer.play();
+            effectPlayer.Play();
         }
 
         public void TriggerEraserEffect() {
-            effectPlayer.stop();
+            effectPlayer.Stop();
             effectPlayer.SoundLocation = eraserEffectPath;
-            effectPlayer.play();
+            effectPlayer.Play();
         }
 
     }
