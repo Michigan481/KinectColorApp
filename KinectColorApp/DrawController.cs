@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Threading;
+using System.Windows;
 
 namespace KinectColorApp
 {
@@ -19,11 +20,13 @@ namespace KinectColorApp
         int prevBackground = 0;
         public Canvas drawingCanvas;
         public Image backgroundImage;
+        public Rectangle colorRect;
 
-        public DrawController(Canvas canvas, Image image)
+        public DrawController(Canvas canvas, Image image, Rectangle rect)
         {
             drawingCanvas = canvas;
             backgroundImage = image;
+            colorRect = rect;
         }
 
         public void CycleBackgrounds()
@@ -69,6 +72,36 @@ namespace KinectColorApp
         public void ChangeColor(Colors new_color)
         {
             color = new_color;
+
+            // Change colorRects color:
+            LinearGradientBrush gradientBrush = new LinearGradientBrush();
+            gradientBrush.StartPoint = new Point(0.5, 0);
+            gradientBrush.EndPoint = new Point(0.5, 1);
+
+            if (new_color == Colors.Red)
+            {
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0, 255, 200, 0), 0));
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 255, 0, 0), 1.0));
+            }
+            else if (new_color == Colors.Green)
+            {
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0, 0, 255, 200), 0));
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 0, 255, 0), 1.0));
+            }
+            else if (new_color == Colors.Blue)
+            {
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0, 200, 0, 255), 0));
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 0, 0, 255), 1.0));
+            }
+            else if (new_color == Colors.White)
+            {
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0, 250, 250, 250), 0));
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 100, 100, 100), 1.0));
+            }
+            
+
+            colorRect.Fill = gradientBrush;
+
         }
 
         public void DrawEllipseAtPoint(double x, double y, int depth)

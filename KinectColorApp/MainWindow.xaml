@@ -16,6 +16,7 @@
             <Image x:Name="backgroundImage" HorizontalAlignment="Left" Height="400" VerticalAlignment="Top" Width="600" Canvas.Top="20" Canvas.Left="20"/>
             <Rectangle x:Name="drawBorder" Height="480" Stroke="White" Width="640" StrokeThickness="20"/>
             <Image x:Name="image1" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Canvas.Left="10" Canvas.Top="10"/>
+            <Rectangle x:Name="colorRect" StrokeThickness="20" Fill="Red" Height="20" Canvas.Top="493" Width="642"/>
         </Canvas>
         <Rectangle x:Name="calibrationBorder" Height="480" Stroke="#FFED00FF" Width="640" StrokeThickness="10" Grid.ColumnSpan="4" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 

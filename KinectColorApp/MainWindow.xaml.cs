@@ -28,7 +28,8 @@ namespace KinectColorApp
             drawingCanvas.Height = drawingCanvas.Width * (3.0 / 4.0);
             backgroundImage.Width = drawingGrid.ActualWidth;
             backgroundImage.Height = drawingGrid.ActualHeight;
-            drawController = new DrawController(drawingCanvas, backgroundImage);
+           
+            drawController = new DrawController(drawingCanvas, backgroundImage, colorRect);
             soundController = new SoundController();
 
             kinectController = new KinectController(drawController, image1, soundController);
@@ -57,9 +58,15 @@ namespace KinectColorApp
                 }
             }
 
+
             this.KeyDown += new KeyEventHandler(OnKeyDown);
             soundController.PlayMusic(Backgrounds.Farm);
             drawController.ChangeBackground(Backgrounds.Farm);
+            drawController.ChangeColor(Colors.Red);
+
+            // Faded colored rectangle:
+            colorRect.Width = drawingCanvas.ActualWidth;
+            Canvas.SetZIndex(colorRect, 11);
         }
 
         private void Window_Size_Did_Change(object sender, RoutedEventArgs e)
