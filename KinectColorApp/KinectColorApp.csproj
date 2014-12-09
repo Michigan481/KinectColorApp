@@ -124,6 +124,13 @@
   <ItemGroup>
     <Resource Include="Resources\pony.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\blue_SFX.mp3" />
+    <Content Include="Resources\change_background_SFX.mp3" />
+    <Content Include="Resources\eraser_SFX.mp3" />
+    <Content Include="Resources\green_SFX.mp3" />
+    <Content Include="Resources\red_SFX.mp3" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

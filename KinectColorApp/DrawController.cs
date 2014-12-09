@@ -118,7 +118,7 @@ namespace KinectColorApp
                 gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 100, 100, 100), 1.0));
             }
             
-
+            // Change color indicator:
             colorRect.Fill = gradientBrush;
         }
 

@@ -6,7 +6,8 @@ using System.Windows.Controls;
 using System.Media;
 
 namespace KinectColorApp {
-    class SoundController {
+    class SoundController
+    {
 
         // File paths for sounds
         const String kalimbaPath = @"../../Resources\Kalimba.mp3";
@@ -21,13 +22,14 @@ namespace KinectColorApp {
         private MediaElement musicPlayer;
         private SoundPlayer effectPlayer;
 
-        public SoundController () {
+        public SoundController()
+        {
             musicPlayer = new MediaElement();
             musicPlayer.LoadedBehavior = MediaState.Manual;
             musicPlayer.UnloadedBehavior = MediaState.Manual;
             musicPlayer.MediaEnded += Media_Ended;
             effectPlayer = new SoundPlayer();
-            musicPlayer.Source =  new Uri(kalimbaPath, UriKind.RelativeOrAbsolute);
+            musicPlayer.Source = new Uri(kalimbaPath, UriKind.RelativeOrAbsolute);
             musicPlayer.Volume = 0;
         }
 
@@ -50,7 +52,8 @@ namespace KinectColorApp {
             musicPlayer.BeginAnimation(MediaElement.VolumeProperty, newAnimation, HandoffBehavior.SnapshotAndReplace);
         }
 
-        public void StopMusic() {
+        public void StopMusic()
+        {
             DoubleAnimation newAnimation = new DoubleAnimation();
             newAnimation.From = musicPlayer.Volume;
             newAnimation.To = 0.0;
@@ -64,36 +67,40 @@ namespace KinectColorApp {
             musicPlayer.BeginAnimation(MediaElement.VolumeProperty, newAnimation, HandoffBehavior.SnapshotAndReplace);
         }
 
-        public void TriggerRedEffect() {
-            effectPlayer.Stop();
-            effectPlayer.SoundLocation = redEffectPath;
-            effectPlayer.Play();
-        }
-
-        public void TriggerGreenEffect() {
-            effectPlayer.Stop();
-            effectPlayer.SoundLocation = greenEffectPath;
-            effectPlayer.Play();
-        }
-
-        public void TriggerBlueEffect() {
-            effectPlayer.Stop();
-            effectPlayer.SoundLocation = blueEffectPath;
-            effectPlayer.Play();
-        }
-
-        public void TriggerBackgroundEffect() {
+        public void TriggerBackgroundEffect()
+        {
             effectPlayer.Stop();
             effectPlayer.SoundLocation = backgroundEffectPath;
             effectPlayer.Play();
         }
 
-        public void TriggerEraserEffect() {
+        public void TriggerColorEffect(int c)
+        {
+            System.Console.WriteLine("Playing sound color effect " + c);
             effectPlayer.Stop();
-            effectPlayer.SoundLocation = eraserEffectPath;
-            effectPlayer.Play();
+            switch (c)
+            {
+                case 0:
+                    effectPlayer.SoundLocation = redEffectPath;
+                    effectPlayer.Play();
+                    break;
+                case 1:
+                    effectPlayer.SoundLocation = greenEffectPath;
+                    effectPlayer.Play();
+                    break;
+                case 2:
+                    effectPlayer.SoundLocation = blueEffectPath;
+                    effectPlayer.Play();
+                    break;
+                case 3:
+                    effectPlayer.SoundLocation = eraserEffectPath;
+                    effectPlayer.Play();
+                    break;
+                default:
+                    effectPlayer.Stop();
+                    break;
+            }
         }
-
     }
 }
 
