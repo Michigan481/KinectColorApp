@@ -11,6 +11,7 @@ namespace KinectColorApp
     class GalileoController
     {
         DrawController drawController;
+        SoundController soundController;
         SerialPort port;
         Thread thread;
         string portName;
@@ -20,10 +21,11 @@ namespace KinectColorApp
 
         DateTime lastTime;
 
-        public GalileoController(DrawController dc, string pN, int bR)
+        public GalileoController(DrawController dc, SoundController sc, string pN, int bR)
         {
             lastTime = DateTime.Now;
             drawController = dc;
+            soundController = sc;
             portName = pN;
             baudRate = bR;
             port = new SerialPort(portName, baudRate);
@@ -60,6 +62,7 @@ namespace KinectColorApp
                             prevColor = currColor;
                             int colorNum = currColor - '0';
                             drawController.ColorChangeFlag(colorNum);
+                            soundController.TriggerColorEffect(colorNum);
                         }
                         //Console.WriteLine(message);
                     }
@@ -71,6 +74,7 @@ namespace KinectColorApp
                         if (timeDiff.TotalMilliseconds > 1000)
                         {
                             drawController.CycleBackgrounds();
+                            soundController.TriggerBackgroundEffect();
                             lastTime = DateTime.Now;
                         }
                     }

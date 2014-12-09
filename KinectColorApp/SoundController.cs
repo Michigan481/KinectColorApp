@@ -13,7 +13,7 @@ namespace KinectColorApp {
         const String kalimbaPath = @"../../Resources\Kalimba.mp3";
         const String redEffectPath = @"../../Resources\red_SFX.wav";
         const String greenEffectPath = @"../../Resources\green_SFX.wav";
-        const String blueEffectPath = @"../../Resources\green_SFX.wav";
+        const String blueEffectPath = @"../../Resources\blue_SFX.wav";
         const String eraserEffectPath = @"../../Resources\eraser_SFX.wav";
         const String backgroundEffectPath = @"../../Resources\change_background_SFX.wav";
 
