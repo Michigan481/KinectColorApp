@@ -92,11 +92,14 @@ namespace KinectColorApp
             }
             else if (e.Key.ToString() == "B")
             {
+                soundController.TriggerBackgroundEffect();
                 drawController.CycleBackgrounds();
             }
             else if (e.Key >= Key.D0 && e.Key <= Key.D3)
             {
-                drawController.ChangeColor((Colors)(e.Key - Key.D0));
+                Colors c = (Colors)(e.Key - Key.D0);
+                soundController.TriggerColorEffect((int)c);
+                drawController.ChangeColor(c);
             }
         }
 

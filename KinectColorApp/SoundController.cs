@@ -61,36 +61,34 @@ namespace KinectColorApp {
             musicPlayer.BeginAnimation(MediaElement.VolumeProperty, newAnimation, HandoffBehavior.SnapshotAndReplace);
         }
 
-        public void TriggerRedEffect() {
-            effectPlayer.stop();
-            effectPlayer.SoundLocation = redEffectPath;
-            effectPlayer.play();
-        }
-
-        public void TriggerGreenEffect() {
-            effectPlayer.stop();
-            effectPlayer.SoundLocation = greenEffectPath;
-            effectPlayer.play();
-        }
-
-        public void TriggerBlueEffect() {
-            effectPlayer.stop();
-            effectPlayer.SoundLocation = blueEffectPath;
-            effectPlayer.play();
-        }
-
         public void TriggerBackgroundEffect() {
             effectPlayer.stop();
             effectPlayer.SoundLocation = backgroundEffectPath;
             effectPlayer.play();
         }
 
-        public void TriggerEraserEffect() {
+        public void TriggerColorEffect(int c) {
             effectPlayer.stop();
-            effectPlayer.SoundLocation = eraserEffectPath;
-            effectPlayer.play();
-        }
-
+            switch (c) {
+                case 0:
+                    effectPlayer.SoundLocation = redEffectPath;
+                    effectPlayer.play();
+                    break;
+                case 1:
+                    effectPlayer.SoundLocation = greenEffectPath;
+                    effectPlayer.play();
+                    break;
+                case 2:
+                    effectPlayer.SoundLocation = blueEffectPath;
+                    effectPlayer.play();
+                    break;
+                case 3:
+                    effectPlayer.SoundLocation = eraserEffectPath;
+                    effectPlayer.play();
+                    break;
+                default:
+                    effectPlayer.stop();
+            }
     }
 }
 
