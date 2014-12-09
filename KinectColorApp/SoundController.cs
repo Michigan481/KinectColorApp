@@ -9,38 +9,33 @@ namespace KinectColorApp {
 
         // File paths for sounds
         const String kalimbaPath = @"../../Resources\Kalimba.mp3";
-        const String busPath = @"../../Resources\Kalimba.mp3";
-        const String farmPath = @"C:\Users\Public\Music\Sample Music\Kalimba.mp3";
-        const String redEffectPath = @"";
-        const String greenEffectPath = @"";
-        const String blueEffectPath = @"";
+        const String redEffectPath = @"../../Resources\red_SFX.mp3";
+        const String greenEffectPath = @"../../Resources\green_SFX.mp3";
+        const String blueEffectPath = @"../../Resources\blue_SFX.mp3";
+        const String eraserEffectPath = @"../../Resources\eraser_SFX.mp3";
+        const String backgroundEffectPath = @"../../Resources\change_background_SFX.mp3";
+
+        const String loadedEffectPath = kalimbaPath;
 
         private MediaElement musicPlayer;
+        private SoundPlayer effectPlayer;
 
         public SoundController () {
             musicPlayer = new MediaElement();
             musicPlayer.LoadedBehavior = MediaState.Manual;
             musicPlayer.UnloadedBehavior = MediaState.Manual;
+            effectPlayer = new SoundPlayer();
             musicPlayer.Source =  new Uri(kalimbaPath, UriKind.RelativeOrAbsolute);
             musicPlayer.Volume = 0;
         }
 
-        public void PlayMusic(Backgrounds background) {
-            switch (background)
-            {
-                case Backgrounds.Farm:
-                    musicPlayer.Source = new Uri(busPath, UriKind.RelativeOrAbsolute);
-                    break;
-                case Backgrounds.Pokemon:
-                    musicPlayer.Source = new Uri(farmPath, UriKind.RelativeOrAbsolute);
-                    break;
-                default:
-                    break;
-            }
-        }
-
         public void StartMusic()
         {
+            if (musicPlayer.CurrentState == MediaElementState.Stopped) {
+                // loop only when it is music and the playback has reached its end
+                musicPlayer.position = TimeSpan.zero;
+            }
+
             musicPlayer.Play();
 
             DoubleAnimation newAnimation = new DoubleAnimation();
@@ -53,7 +48,6 @@ namespace KinectColorApp {
         }
 
         public void StopMusic() {
-            Console.WriteLine("here");
             DoubleAnimation newAnimation = new DoubleAnimation();
             newAnimation.From = musicPlayer.Volume;
             newAnimation.To = 0.0;
@@ -66,6 +60,37 @@ namespace KinectColorApp {
 
             musicPlayer.BeginAnimation(MediaElement.VolumeProperty, newAnimation, HandoffBehavior.SnapshotAndReplace);
         }
+
+        public void TriggerRedEffect() {
+            effectPlayer.stop();
+            effectPlayer.SoundLocation = redEffectPath;
+            effectPlayer.play();
+        }
+
+        public void TriggerGreenEffect() {
+            effectPlayer.stop();
+            effectPlayer.SoundLocation = greenEffectPath;
+            effectPlayer.play();
+        }
+
+        public void TriggerBlueEffect() {
+            effectPlayer.stop();
+            effectPlayer.SoundLocation = blueEffectPath;
+            effectPlayer.play();
+        }
+
+        public void TriggerBackgroundEffect() {
+            effectPlayer.stop();
+            effectPlayer.SoundLocation = backgroundEffectPath;
+            effectPlayer.play();
+        }
+
+        public void TriggerEraserEffect() {
+            effectPlayer.stop();
+            effectPlayer.SoundLocation = eraserEffectPath;
+            effectPlayer.play();
+        }
+
     }
 }
 
