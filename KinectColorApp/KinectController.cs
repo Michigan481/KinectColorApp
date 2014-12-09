@@ -51,6 +51,12 @@ namespace KinectColorApp
             {
                 drawController.ChangeBackground(drawController.background);
             }
+            
+            // Check if we need to change color
+            if (drawController.shouldChangeColor != -1)
+            {
+                drawController.ChangeColor((Colors)drawController.shouldChangeColor);
+            }
 
             using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
             {
