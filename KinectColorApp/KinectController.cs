@@ -56,16 +56,16 @@ namespace KinectColorApp
             {
                 if (depthFrame == null)
                 {
-                    Console.WriteLine("No depth frame");
+                    //Console.WriteLine("No depth frame");
                     return;
                 }
 
                 if (this.isCalibrated) {
                     this.ParseDepthFrame(depthFrame);
 
-                    byte[] pixels = this.GenerateColoredBytes(depthFrame);
-                    int stride = depthFrame.Width * 4;
-                    debugImage.Source = BitmapSource.Create(depthFrame.Width, depthFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
+                    //byte[] pixels = this.GenerateColoredBytes(depthFrame);
+                    //int stride = depthFrame.Width * 4;
+                    //debugImage.Source = BitmapSource.Create(depthFrame.Width, depthFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
                 }
                 else
                 {
@@ -105,7 +105,16 @@ namespace KinectColorApp
             {
                 // Skip this depth index if it's horizontally outside of our textile
                 int x_kinect = (int)((depthIndex) % depthFrame.Width);
-                if (x_kinect < topLeft.X || x_kinect > bottomRight.X) continue;
+                if (x_kinect < topLeft.X)
+                {
+                    continue;
+                }
+                else if (x_kinect > bottomRight.X)
+                {
+                    depthIndex += (depthFrame.Width - (int)(bottomRight.X - topLeft.X - 1));
+                    //Console.WriteLine(depthFrame.Width - (int)(bottomRight.X - topLeft.X - 1));
+                    continue;
+                }
 
                 int depth = rawDepthData[depthIndex] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
