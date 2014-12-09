@@ -13,10 +13,6 @@ namespace KinectColorApp
 {
     class DrawController
     {
-        // File paths for backgrounds
-        const String busPath = @"../../../Assets\Backgrounds\bus.png";
-        const String farmPath = @"";
-
         private Colors color = Colors.Red;
         public Backgrounds background = Backgrounds.AlreadySet;
 
@@ -52,17 +48,12 @@ namespace KinectColorApp
             switch (new_background)
             {
                 case Backgrounds.Farm:
-                    //bitmap.UriSource = new Uri("pack://application:,,,/Resources/bus.jpg");
                     backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/animal.png"));
                     break;
                 case Backgrounds.Pokemon:
-                    Console.WriteLine("Got into pokemon case");
-                    //bitmap.UriSource = new Uri("pack://application:,,,/Resources/animal.jpg");
                     backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/pokemon.png"));
                     break;
                 case Backgrounds.Turtle:
-                    Console.WriteLine("Got into turtle case");
-                    //bitmap.UriSource = new Uri("pack://application:,,,/Resources/animal.jpg");
                     backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/turtle.png"));
                     break;
 
@@ -82,56 +73,41 @@ namespace KinectColorApp
 
         public void DrawEllipseAtPoint(double x, double y, int depth)
         {
-            // Create a red Ellipse.
+            // Create an ellipse with a gradient brush
             Ellipse myEllipse = new Ellipse();
+            RadialGradientBrush brush = new RadialGradientBrush();
 
-            // Create a SolidColorBrush with a red color to fill the  
-            // Ellipse with.
-            //SolidColorBrush mySolidColorBrush = new SolidColorBrush();
-            RadialGradientBrush mySolidColorBrush = new RadialGradientBrush();
-
-            // Describes the brush's color using RGB values.  
-            // Each value has a range of 0-255.
-            //Console.WriteLine(depth);
-
-            //int colorValue = (int) (255 * (1 - (depth / 100.0)));
             int colorValue = (int)(255 * (depth / 100.0));
             if (colorValue < 0) colorValue = 0;
             if (colorValue > 255) colorValue = 255;
 
-            // Change what color we actually make the ellipse:
-            // 1: Red, 2: Blue, 3: Green
+            // Set the color based on depth data
             if (color == Colors.Red)
             {
-                //mySolidColorBrush.Color = Color.FromArgb(100, 255, (byte)colorValue, 0);
-                mySolidColorBrush.GradientStops.Add(new GradientStop(Color.FromArgb(200, 255, (byte)colorValue, 0), 0.0));
-                mySolidColorBrush.GradientStops.Add(new GradientStop(Color.FromArgb(200, 255, (byte)colorValue, 0), 0.4));
-                mySolidColorBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0, 255, (byte)colorValue, 0), 1.0));
+                brush.GradientStops.Add(new GradientStop(Color.FromArgb(200, 255, (byte)colorValue, 0), 0.0));
+                brush.GradientStops.Add(new GradientStop(Color.FromArgb(200, 255, (byte)colorValue, 0), 0.4));
+                brush.GradientStops.Add(new GradientStop(Color.FromArgb(0, 255, (byte)colorValue, 0), 1.0));
             }
             else if (color == Colors.Green)
             {
-                //mySolidColorBrush.Color = Color.FromArgb(100, 0, 255, (byte)colorValue);
-                mySolidColorBrush.GradientStops.Add(new GradientStop(Color.FromArgb(200, 0, 255, (byte)colorValue), 0.0));
-                mySolidColorBrush.GradientStops.Add(new GradientStop(Color.FromArgb(200, 0, 255, (byte)colorValue), 0.4));
-                mySolidColorBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0, 0, 255, (byte)colorValue), 1.0));
+                brush.GradientStops.Add(new GradientStop(Color.FromArgb(200, 0, 255, (byte)colorValue), 0.0));
+                brush.GradientStops.Add(new GradientStop(Color.FromArgb(200, 0, 255, (byte)colorValue), 0.4));
+                brush.GradientStops.Add(new GradientStop(Color.FromArgb(0, 0, 255, (byte)colorValue), 1.0));
             }
             else if (color == Colors.Blue)
             {
-                //mySolidColorBrush.Color = Color.FromArgb(100, (byte)colorValue, 0, 255);
-                mySolidColorBrush.GradientStops.Add(new GradientStop(Color.FromArgb(200, (byte)colorValue, 0, 255), 0.0));
-                mySolidColorBrush.GradientStops.Add(new GradientStop(Color.FromArgb(200, (byte)colorValue, 0, 255), 0.4));
-                mySolidColorBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0, (byte)colorValue, 0, 255), 1.0));
+                brush.GradientStops.Add(new GradientStop(Color.FromArgb(200, (byte)colorValue, 0, 255), 0.0));
+                brush.GradientStops.Add(new GradientStop(Color.FromArgb(200, (byte)colorValue, 0, 255), 0.4));
+                brush.GradientStops.Add(new GradientStop(Color.FromArgb(0, (byte)colorValue, 0, 255), 1.0));
             }
             else if (color == Colors.White) 
             {
-                //mySolidColorBrush.Color = Color.FromArgb(255, 255, 255, 255);
-                mySolidColorBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 255, 255, 255), 0.0));
-                mySolidColorBrush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 255, 255, 255), 1.0));
+                brush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 255, 255, 255), 0.0));
+                brush.GradientStops.Add(new GradientStop(Color.FromArgb(255, 255, 255, 255), 1.0));
             }
 
-            myEllipse.Fill = mySolidColorBrush;
+            myEllipse.Fill = brush;
             myEllipse.StrokeThickness = 0;
-            myEllipse.Stroke = Brushes.Black;
 
             // Set the width and height of the Ellipse.
             myEllipse.Width = 25;
@@ -141,16 +117,13 @@ namespace KinectColorApp
             Canvas.SetLeft(myEllipse, x - myEllipse.Width/2);
             Canvas.SetZIndex(myEllipse, 0);
 
-            // Add the Ellipse to the StackPanel.
+            // Add the Ellipse to the drawingCanvas
             drawingCanvas.Children.Add(myEllipse);
         }
 
         public void ClearScreen()
         {
-            // Remove everything
-            //drawingCanvas.Children.Clear();
-
-            // Remove ellipses only (For testing with debug image)
+            // Remove ellipses only
             var shapes = drawingCanvas.Children.OfType<Ellipse>().ToList();
             foreach (var shape in shapes)
             {

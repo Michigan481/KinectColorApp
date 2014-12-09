@@ -33,15 +33,6 @@ namespace KinectColorApp
             debugImage = image;
             drawController = dController;
             soundController = sController;
-
-            //double x = (1 * drawController.drawingCanvas.Width);
-            //double y = (1 * drawController.drawingCanvas.Height);
-            //drawController.drawEllipseAtPoint(x, y, 0);
-
-            //x = (0 * drawController.drawingCanvas.Width);
-            //y = (0 * drawController.drawingCanvas.Height);
-            //drawController.changeColor(Colors.Green);
-            //drawController.drawEllipseAtPoint(x, y, 40);
         }
 
         public void Calibrate(int top_left_x, int top_left_y, int bottom_right_x, int bottom_right_y)
@@ -50,8 +41,6 @@ namespace KinectColorApp
             bottomRight = new Point(bottom_right_x, bottom_right_y);
             textileWidth = bottom_right_x - top_left_x;
             textileHeight = bottom_right_y - top_left_y;
-
-            Console.WriteLine(textileHeight);
             this.isCalibrated = true;
         }
 
@@ -118,19 +107,15 @@ namespace KinectColorApp
                 int x_kinect = (int)((depthIndex) % depthFrame.Width);
                 if (x_kinect < topLeft.X || x_kinect > bottomRight.X) continue;
 
-                int player = rawDepthData[depthIndex] & DepthImageFrame.PlayerIndexBitmask;
                 int depth = rawDepthData[depthIndex] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
                 // Ignore invalid depth values
                 if (depth == -1 || depth == 0) continue;
 
-                if (depth <= this.DepthThreshold)
+                if (depth < minDepth)
                 {
-                    if (depth < minDepth)
-                    {
-                        minDepth = depth;
-                        bestDepthIndex = depthIndex;
-                    }
+                    minDepth = depth;
+                    bestDepthIndex = depthIndex;
                 }
             }
 
