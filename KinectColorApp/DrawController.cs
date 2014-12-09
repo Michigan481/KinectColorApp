@@ -59,6 +59,15 @@ namespace KinectColorApp
                 case Backgrounds.Turtle:
                     backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/turtle.png"));
                     break;
+                case Backgrounds.Planets:
+                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/planets.png"));
+                    break;
+                case Backgrounds.Pony:
+                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/pony.png"));
+                    break;
+                case Backgrounds.Car:
+                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/car.png"));
+                    break;
 
                 default:
                     break;
