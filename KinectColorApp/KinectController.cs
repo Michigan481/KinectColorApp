@@ -20,7 +20,7 @@ namespace KinectColorApp
         private bool isCalibrated = false;
         private bool hasSetDepthThreshold = false;
         private int DepthThreshold = 9000000;
-        const int TextileSpacing = 10;
+        const int TextileSpacing = 4; // How deep do we have to push in to start drawing?
 
         // Store the location and size of the textile in Kinect coordinates
         private Point topLeft;
@@ -164,7 +164,8 @@ namespace KinectColorApp
             x_ratio = (1 - x_ratio);
             double y_ratio = (y_kinect - topLeft.Y + 20) / (double)(textileHeight + 30);
 
-            double x = (x_ratio * drawController.drawingCanvas.Width) - 80;
+            // The constants at the end of these equations move the dot horizontally and vertically in all cases
+            double x = (x_ratio * drawController.drawingCanvas.Width) - 108;
             double y = (y_ratio * drawController.drawingCanvas.Height);
 
             drawController.DrawEllipseAtPoint(x, y, (DepthThreshold - minDepth));

@@ -65,7 +65,7 @@ namespace KinectColorApp
                             soundController.TriggerColorEffect(colorNum);
                         }
                         //Console.WriteLine(message);
-                    }
+                    } 
                     // Change background:
                     else if (message[0] == '5')
                     {

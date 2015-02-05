@@ -16,8 +16,9 @@ namespace KinectColorApp
     {
         private Colors color = Colors.Red;
         public Backgrounds background = Backgrounds.AlreadySet;
-        public int shouldChangeColor = -1;
+        private double ColorChangeSpeed = 60.0; // How fast does the color change with depth? smaller number changes faster.
 
+        public int shouldChangeColor = -1;
         int prevBackground = 0;
         
         public Canvas drawingCanvas;
@@ -128,7 +129,7 @@ namespace KinectColorApp
             Ellipse myEllipse = new Ellipse();
             RadialGradientBrush brush = new RadialGradientBrush();
 
-            int colorValue = (int)(255 * (depth / 100.0));
+            int colorValue = (int)(255 * (depth / ColorChangeSpeed));
             if (colorValue < 0) colorValue = 0;
             if (colorValue > 255) colorValue = 255;
 
@@ -161,8 +162,8 @@ namespace KinectColorApp
             myEllipse.StrokeThickness = 0;
 
             // Set the width and height of the Ellipse.
-            myEllipse.Width = 25;
-            myEllipse.Height = 25;
+            myEllipse.Width = 25 + 25 * (depth/60.0);
+            myEllipse.Height = 25 + 25 * (depth / 60.0);
 
             Canvas.SetTop(myEllipse, y - myEllipse.Height/2);
             Canvas.SetLeft(myEllipse, x - myEllipse.Width/2);

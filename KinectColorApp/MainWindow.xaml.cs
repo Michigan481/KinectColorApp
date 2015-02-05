@@ -33,7 +33,7 @@ namespace KinectColorApp
             soundController = new SoundController();
 
             kinectController = new KinectController(drawController, image1, soundController);
-            galileoController = new GalileoController(drawController, soundController, "COM3", 9600);
+            //galileoController = new GalileoController(drawController, soundController, "COM3", 9600);
         }
 
         private DrawController drawController;
@@ -94,6 +94,10 @@ namespace KinectColorApp
             {
                 soundController.TriggerBackgroundEffect();
                 drawController.CycleBackgrounds();
+            }
+            else if (e.Key.ToString() == "Q")
+            {
+                Application.Current.Shutdown();
             }
             else if (e.Key >= Key.D0 && e.Key <= Key.D3)
             {
@@ -169,7 +173,7 @@ namespace KinectColorApp
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             StopKinect(this.sensor);
-            galileoController.closePort();
+            //galileoController.closePort();
         }
     }
 }
