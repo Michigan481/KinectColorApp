@@ -7,6 +7,7 @@ Key Commands:
 0: Red Color
 1: Green Color
 2: Blue Color
+3: Eraser
 R: Refresh Screen
 B: Change Background
 Q: Quit
