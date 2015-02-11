@@ -61,6 +61,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CalibrationController.cs" />
+    <Compile Include="Matrix.cs" />
     <Compile Include="SoundController.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -131,6 +133,11 @@
     <Resource Include="Resources\pony.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\0_code.png" />
+    <Resource Include="Resources\1_code.png" />
+    <Resource Include="Resources\2_code.png" />
+    <Resource Include="Resources\3_code.png" />
+    <Resource Include="Resources\4_code.png" />
     <Content Include="Resources\blue_SFX.wav" />
     <Content Include="Resources\change_background_SFX.wav" />
     <Content Include="Resources\eraser_SFX.wav" />

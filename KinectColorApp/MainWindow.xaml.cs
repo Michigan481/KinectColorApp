@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace KinectColorApp
 {
@@ -28,19 +30,30 @@ namespace KinectColorApp
             drawingCanvas.Height = drawingCanvas.Width * (3.0 / 4.0);
             backgroundImage.Width = drawingGrid.ActualWidth;
             backgroundImage.Height = drawingGrid.ActualHeight;
-           
+            backgroundImage.Visibility = Visibility.Hidden;
+            colorRect.Visibility = Visibility.Hidden;
+            calibrationLabel.Visibility = Visibility.Hidden;
+
+            Image[] codes = new Image[] { _0_code, _1_code, _2_code, _3_code, _4_code };
+            foreach (Image i in codes) {
+                i.Visibility = Visibility.Hidden;
+            }
+            _0_code.Visibility = Visibility.Visible;
+
+            calController = new CalibrationController(drawingCanvas, codes, image1);
             drawController = new DrawController(drawingCanvas, backgroundImage, colorRect);
             soundController = new SoundController();
-
             kinectController = new KinectController(drawController, image1, soundController);
             //galileoController = new GalileoController(drawController, soundController, "COM3", 9600);
         }
 
+        private CalibrationController calController;
         private DrawController drawController;
         private SoundController soundController;
         private KinectController kinectController;
         private GalileoController galileoController;
         private KinectSensor sensor;
+        bool has_started_calibrating = false;
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -52,12 +65,10 @@ namespace KinectColorApp
                 {
                     this.sensor.ColorStream.Enable();
                     this.sensor.DepthStream.Enable();
-                    this.sensor.SkeletonStream.Enable();
-                    this.sensor.AllFramesReady += kinectController.SensorAllFramesReady;
+                    this.sensor.AllFramesReady += calController.CalibrationAllFramesReady;
                     this.sensor.Start();
                 }
             }
-
 
             this.KeyDown += new KeyEventHandler(OnKeyDown);
             soundController.StartMusic();
@@ -74,9 +85,6 @@ namespace KinectColorApp
             drawingCanvas.Width = drawingGrid.ActualWidth;
             drawingCanvas.Height = drawingCanvas.Width * (3.0 / 4.0);
 
-            calibrationBorder.Width = drawingGrid.ActualWidth;
-            calibrationBorder.Height = calibrationBorder.Width*(3.0/4.0);
-
             drawBorder.Width = drawingGrid.ActualWidth;
             drawBorder.Height = drawBorder.Width * (3.0 / 4.0);
 
@@ -87,6 +95,12 @@ namespace KinectColorApp
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             Console.WriteLine(e.Key.ToString());
+            if (!has_started_calibrating)
+            {
+                calibrationLabel.Content = "Calibrating...";
+                has_started_calibrating = true;
+            }
+
             if (e.Key.ToString() == "R") {
                 drawController.ClearScreen();
             }
@@ -105,60 +119,6 @@ namespace KinectColorApp
                 soundController.TriggerColorEffect((int)c);
                 drawController.ChangeColor(c);
             }
-        }
-
-        // Calibration
-        private Point startPoint;
-        private Rectangle rect;
-
-        private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            startPoint = e.GetPosition(drawingCanvas);
-            rect = new Rectangle
-            {
-                Stroke = Brushes.Red,
-                StrokeThickness = 2
-            };
-
-            Canvas.SetLeft(rect, startPoint.X);
-            Canvas.SetTop(rect, startPoint.X);
-            drawingCanvas.Children.Add(rect);
-        }
-
-        private void Canvas_MouseMoved(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Released || rect == null)
-                return;
-
-            var pos = e.GetPosition(drawingCanvas);
-
-            var x = Math.Min(pos.X, startPoint.X);
-            var y = Math.Min(pos.Y, startPoint.Y);
-
-            var w = Math.Max(pos.X, startPoint.X) - x;
-            var h = 0.75 * w;
-            //var h = Math.Max(pos.Y, startPoint.Y) - y;
-
-            rect.Width = w;
-            rect.Height = h;
-
-            Canvas.SetLeft(rect, x);
-            Canvas.SetTop(rect, y);
-        }
-
-        private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            Point endPoint = e.GetPosition(drawingCanvas);
-            Console.WriteLine(rect.Height);
-            this.kinectController.Calibrate((int)startPoint.X - 10, (int)startPoint.Y - 10, (int)(startPoint.X + rect.Width - 10), (int)(startPoint.Y + rect.Height - 10));
-
-            this.calibrationBorder.Visibility = Visibility.Hidden;
-            this.image1.Visibility = Visibility.Hidden;
-            rect.Visibility = Visibility.Hidden;
-            rect = null;
-
-            Canvas.SetZIndex(backgroundImage, 2);
-            Canvas.SetZIndex(drawBorder, 1);
         }
 
         void StopKinect(KinectSensor sensor)

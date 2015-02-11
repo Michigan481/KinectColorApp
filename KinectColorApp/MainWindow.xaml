@@ -12,13 +12,18 @@
             <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
 
-        <Canvas x:Name="drawingCanvas" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMoved" MouseUp="Canvas_MouseUp" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Grid.ColumnSpan="4">
+        <Canvas x:Name="drawingCanvas" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Grid.ColumnSpan="4">
             <Image x:Name="backgroundImage" HorizontalAlignment="Left" Height="400" VerticalAlignment="Top" Width="600" Canvas.Top="20" Canvas.Left="20"/>
             <Rectangle x:Name="drawBorder" Height="480" Stroke="White" Width="640" StrokeThickness="20"/>
             <Image x:Name="image1" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Canvas.Left="10" Canvas.Top="10"/>
             <Rectangle x:Name="colorRect" StrokeThickness="20" Fill="Red" Height="20" Canvas.Top="493" Width="642"/>
+            <Image x:Name="_0_code" Height="137" Canvas.Left="20" Canvas.Top="20" Width="152" Source="Resources/0_code.png"/>
+            <Image x:Name="_1_code" Height="137" Canvas.Left="20" Canvas.Top="283" Width="152" Source="Resources/1_code.png"/>
+            <Image x:Name="_2_code" Height="137" Canvas.Left="210" Canvas.Top="156" Width="152" Source="Resources/2_code.png"/>
+            <Image x:Name="_3_code" Height="137" Canvas.Left="468" Canvas.Top="20" Width="152" Source="Resources/3_code.png"/>
+            <Image x:Name="_4_code" Height="137" Canvas.Left="468" Canvas.Top="283" Width="152" Source="Resources/4_code.png"/>
         </Canvas>
-        <Rectangle x:Name="calibrationBorder" Height="480" Stroke="#FFED00FF" Width="640" StrokeThickness="10" Grid.ColumnSpan="4" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="calibrationLabel" Content="Welcome! Press any button to calibrate." HorizontalAlignment="Left" Margin="38,424,0,0" VerticalAlignment="Top" Grid.ColumnSpan="4" Width="529" Height="56" FontFamily="Segoe Marker" FontSize="36"/>
 
     </Grid>
 </Window>
