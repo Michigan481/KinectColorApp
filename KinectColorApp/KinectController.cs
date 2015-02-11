@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Kinect;
+using ZXing.Kinect;
 
 namespace KinectColorApp
 {
@@ -20,7 +21,7 @@ namespace KinectColorApp
         private bool isCalibrated = false;
         private bool hasSetDepthThreshold = false;
         private int DepthThreshold = 9000000;
-        const int TextileSpacing = 4; // How deep do we have to push in to start drawing?
+        const int TextileSpacing = 5; // How deep do we have to push in to start drawing?
 
         // Store the location and size of the textile in Kinect coordinates
         private Point topLeft;
@@ -42,6 +43,25 @@ namespace KinectColorApp
             textileWidth = bottom_right_x - top_left_x;
             textileHeight = bottom_right_y - top_left_y;
             this.isCalibrated = true;
+        }
+
+        void Track_barcodes(ColorImageFrame colorFrame)
+        {
+            ZXing.Kinect.BarcodeReader reader = new ZXing.Kinect.BarcodeReader();
+            if (colorFrame != null)
+            {
+                //Decode the colorFrame
+                var result = reader.Decode(colorFrame);
+
+                //Show the result
+                if (result != null)
+                {
+                    double center_x = result.ResultPoints[0].X + 0.5 * (result.ResultPoints[2].X - result.ResultPoints[0].X);
+                    double center_y = result.ResultPoints[0].Y + 0.5 * (result.ResultPoints[2].Y - result.ResultPoints[0].Y);
+                    Console.WriteLine(center_x + " " + center_y);
+                    drawController.DrawEllipseAtPoint(640 - center_x, center_y, 20);
+                }
+            }
         }
 
         public void SensorAllFramesReady(object sender, AllFramesReadyEventArgs e)
@@ -81,11 +101,18 @@ namespace KinectColorApp
                     //debugImage.Source = BitmapSource.Create(depthFrame.Width, depthFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
 
                     // Display color video in debug image
-                    ColorImageFrame colorFrame = e.OpenColorImageFrame();
-                    byte[] pixels = new byte[colorFrame.PixelDataLength];
-                    colorFrame.CopyPixelDataTo(pixels);
-                    int stride = colorFrame.Width * 4;
-                    debugImage.Source = BitmapSource.Create(colorFrame.Width, colorFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
+                    using (ColorImageFrame colorFrame = e.OpenColorImageFrame())
+                    {
+                        if (colorFrame != null)
+                        {
+                            byte[] pixels = new byte[colorFrame.PixelDataLength];
+                            colorFrame.CopyPixelDataTo(pixels);
+                            int stride = colorFrame.Width * 4;
+                            debugImage.Source = BitmapSource.Create(colorFrame.Width, colorFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
+
+                            Track_barcodes(colorFrame);
+                        }
+                    }
                 }
                 
             }

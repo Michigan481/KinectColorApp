@@ -44,3 +44,5 @@ C:\Users\Ali\Desktop\EECS-481\KinectColorApp\KinectColorApp\obj\Debug\KinectColo
 C:\Users\Ali\Desktop\EECS-481\KinectColorApp\KinectColorApp\obj\Debug\KinectColorApp.Properties.Resources.resources
 C:\Users\Ali\Desktop\EECS-481\KinectColorApp\KinectColorApp\obj\Debug\KinectColorApp.csproj.GenerateResource.Cache
 C:\Users\Evan\Code\KinectColorApp\KinectColorApp\obj\Debug\KinectColorApp_Content.g.cs
+C:\Users\Evan\Code\KinectColorApp\KinectColorApp\bin\Debug\zxing.dll
+C:\Users\Evan\Code\KinectColorApp\KinectColorApp\bin\Debug\zxing.kinect.dll
