@@ -17,13 +17,17 @@
             <Rectangle x:Name="drawBorder" Height="480" Stroke="White" Width="640" StrokeThickness="20"/>
             <Image x:Name="image1" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Canvas.Left="10" Canvas.Top="10"/>
             <Rectangle x:Name="colorRect" StrokeThickness="20" Fill="Red" Height="20" Canvas.Top="493" Width="642"/>
-            <Image x:Name="_0_code" Height="137" Canvas.Left="20" Canvas.Top="20" Width="152" Source="Resources/0_code.png"/>
-            <Image x:Name="_1_code" Height="137" Canvas.Left="20" Canvas.Top="283" Width="152" Source="Resources/1_code.png"/>
-            <Image x:Name="_2_code" Height="137" Canvas.Left="210" Canvas.Top="156" Width="152" Source="Resources/2_code.png"/>
-            <Image x:Name="_3_code" Height="137" Canvas.Left="468" Canvas.Top="20" Width="152" Source="Resources/3_code.png"/>
-            <Image x:Name="_4_code" Height="137" Canvas.Left="468" Canvas.Top="283" Width="152" Source="Resources/4_code.png"/>
+            <Image x:Name="_0_code" Height="224" Canvas.Left="-16" Canvas.Top="-16" Width="225" Source="Resources/0_code.png"/>
+            <Image x:Name="_1_code" Height="225" Canvas.Left="-11" Canvas.Top="265" Width="225" Source="Resources/1_code.png"/>
+            <Image x:Name="_2_code" Height="225" Canvas.Left="236" Canvas.Top="151" Width="225" Source="Resources/2_code.png"/>
+            <Image x:Name="_3_code" Height="225" Canvas.Left="476" Canvas.Top="-17" Width="225" Source="Resources/3_code.png"/>
+            <Image x:Name="_4_code" Height="225" Canvas.Left="476" Canvas.Top="280" Width="225" Source="Resources/4_code.png"/>
+            <Image x:Name="_5_code" Height="224" Canvas.Left="38" Canvas.Top="185" Width="224" Source="Resources/5_code.png"/>
+            <Image x:Name="_6_code" Height="224" Canvas.Left="289" Canvas.Top="30" Width="224" Source="Resources/6_code.png"/>
+            <Image x:Name="_7_code" Height="224" Canvas.Left="339" Canvas.Top="236" Width="224" Source="Resources/7_code.png"/>
+            <Image x:Name="_8_code" Height="224" Canvas.Left="161" Canvas.Top="289" Width="224" Source="Resources/8_code.png"/>
         </Canvas>
-        <Label x:Name="calibrationLabel" Content="Welcome! Press any button to calibrate." HorizontalAlignment="Left" Margin="38,424,0,0" VerticalAlignment="Top" Grid.ColumnSpan="4" Width="529" Height="56" FontFamily="Segoe Marker" FontSize="36"/>
+        <Label x:Name="calibrationLabel" Content="Welcome! Press any button to calibrate." HorizontalAlignment="Left" Margin="-21,464,0,0" VerticalAlignment="Top" Grid.ColumnSpan="4" Width="529" Height="56" FontFamily="Segoe Marker" FontSize="36"/>
 
     </Grid>
 </Window>

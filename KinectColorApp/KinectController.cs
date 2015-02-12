@@ -20,7 +20,8 @@ namespace KinectColorApp
         private bool isCalibrated = false;
         private bool hasSetDepthThreshold = false;
         private int DepthThreshold = 9000000;
-        const int TextileSpacing = 5; // How deep do we have to push in to start drawing?
+        const int TextileSpacing = 7; // How deep do we have to push in to start drawing?
+        public double[] calibration_coefficients;
 
         // Store the location and size of the textile in Kinect coordinates
         private Point topLeft;
@@ -85,10 +86,22 @@ namespace KinectColorApp
                     {
                         if (colorFrame != null)
                         {
-                            byte[] pixels = new byte[colorFrame.PixelDataLength];
-                            colorFrame.CopyPixelDataTo(pixels);
-                            int stride = colorFrame.Width * 4;
-                            debugImage.Source = BitmapSource.Create(colorFrame.Width, colorFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
+                            //byte[] pixels = new byte[colorFrame.PixelDataLength];
+                            //colorFrame.CopyPixelDataTo(pixels);
+                            //int stride = colorFrame.Width * 4;
+                            //debugImage.Source = BitmapSource.Create(colorFrame.Width, colorFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
+                            debugImage.Visibility = Visibility.Hidden;
+
+                            Console.WriteLine("A: " + calibration_coefficients[0]);
+                            Console.WriteLine("B: " + calibration_coefficients[1]);
+                            Console.WriteLine("C: " + calibration_coefficients[2]);
+                            Console.WriteLine("D: " + calibration_coefficients[3]);
+                            Console.WriteLine("E: " + calibration_coefficients[4]);
+                            Console.WriteLine("F: " + calibration_coefficients[5]);
+                            isCalibrated = true;
+
+                            //drawController.backgroundImage.Visibility = Visibility.Visible;
+                            //Canvas.SetZIndex(drawController.backgroundImage, 2);
                         }
                     }
                 }
@@ -111,6 +124,8 @@ namespace KinectColorApp
             // Loop through data and set colors for each pixel
             int minDepthIndex = (int)this.topLeft.Y * depthFrame.Width;
             int maxDepthIndex = (int)this.bottomRight.Y * depthFrame.Width;
+
+            //Console.WriteLine("Depth Threshold: " + DepthThreshold);
 
             for (int depthIndex = minDepthIndex; depthIndex < maxDepthIndex; depthIndex++)
             {
@@ -165,13 +180,19 @@ namespace KinectColorApp
             double x_kinect = (depthIndex % depthFrame.Width);
             double y_kinect = (depthIndex / depthFrame.Width);
 
-            double x_ratio = (x_kinect - topLeft.X - 25) / (double)(textileWidth + 50);
-            x_ratio = (1 - x_ratio);
-            double y_ratio = (y_kinect - topLeft.Y + 20) / (double)(textileHeight + 30);
+            //double x_ratio = (x_kinect - topLeft.X - 25) / (double)(textileWidth + 50);
+            //x_ratio = (1 - x_ratio);
+            //double y_ratio = (y_kinect - topLeft.Y + 20) / (double)(textileHeight + 30);
 
-            // The constants at the end of these equations move the dot horizontally and vertically in all cases
-            double x = (x_ratio * drawController.drawingCanvas.Width) - 108;
-            double y = (y_ratio * drawController.drawingCanvas.Height);
+            //// The constants at the end of these equations move the dot horizontally and vertically in all cases
+            //double x = (x_ratio * drawController.drawingCanvas.Width) - 108;
+            //double y = (y_ratio * drawController.drawingCanvas.Height);
+
+            double x = x_kinect * calibration_coefficients[0] + y_kinect * calibration_coefficients[1] + calibration_coefficients[2] - 50;
+            double y = x_kinect * calibration_coefficients[3] + y_kinect * calibration_coefficients[4] + calibration_coefficients[5] - 20;
+
+            x = drawController.drawingCanvas.Width - x;
+            Console.WriteLine("Drawing at " + x + ", " + y);
 
             drawController.DrawEllipseAtPoint(x, y, (DepthThreshold - minDepth));
         }

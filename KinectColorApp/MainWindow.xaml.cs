@@ -34,13 +34,6 @@ namespace KinectColorApp
             colorRect.Visibility = Visibility.Hidden;
             calibrationLabel.Visibility = Visibility.Hidden;
 
-            Image[] codes = new Image[] { _0_code, _1_code, _2_code, _3_code, _4_code };
-            foreach (Image i in codes) {
-                i.Visibility = Visibility.Hidden;
-            }
-            _0_code.Visibility = Visibility.Visible;
-
-            calController = new CalibrationController(drawingCanvas, codes, image1);
             drawController = new DrawController(drawingCanvas, backgroundImage, colorRect);
             soundController = new SoundController();
             kinectController = new KinectController(drawController, image1, soundController);
@@ -63,6 +56,14 @@ namespace KinectColorApp
 
                 if (this.sensor.Status == KinectStatus.Connected)
                 {
+                    Image[] codes = new Image[] { _0_code, _1_code, _2_code, _3_code, _4_code, _5_code, _6_code, _7_code, _8_code };
+                    foreach (Image i in codes)
+                    {
+                        i.Visibility = Visibility.Hidden;
+                    }
+                    _0_code.Visibility = Visibility.Visible;
+                    calController = new CalibrationController(sensor, kinectController, drawingCanvas, codes, image1, drawController);
+
                     this.sensor.ColorStream.Enable();
                     this.sensor.DepthStream.Enable();
                     this.sensor.AllFramesReady += calController.CalibrationAllFramesReady;
@@ -99,6 +100,17 @@ namespace KinectColorApp
             {
                 calibrationLabel.Content = "Calibrating...";
                 has_started_calibrating = true;
+
+               // _0_code.Visibility = Visibility.Visible;
+                //_1_code.Visibility = Visibility.Visible;
+                //_2_code.Visibility = Visibility.Visible;
+                //_3_code.Visibility = Visibility.Visible;
+                //_4_code.Visibility = Visibility.Visible;
+
+                //image1.Visibility = Visibility.Visible;
+
+                    //Point center = _0_code.TransformToAncestor(drawingCanvas).Transform(new Point(_0_code.ActualWidth / 2, _0_code.ActualHeight / 2));
+                    //drawController.DrawEllipseAtPoint(center.X, center.Y, 20);
             }
 
             if (e.Key.ToString() == "R") {
