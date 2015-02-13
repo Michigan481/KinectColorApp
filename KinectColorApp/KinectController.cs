@@ -61,11 +61,7 @@ namespace KinectColorApp
 
             using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
             {
-                if (depthFrame == null)
-                {
-                    //Console.WriteLine("No depth frame");
-                    return;
-                }
+                if (depthFrame == null) return;
 
                 if (this.isCalibrated) {
                     this.ParseDepthFrame(depthFrame);
@@ -180,19 +176,11 @@ namespace KinectColorApp
             double x_kinect = (depthIndex % depthFrame.Width);
             double y_kinect = (depthIndex / depthFrame.Width);
 
-            //double x_ratio = (x_kinect - topLeft.X - 25) / (double)(textileWidth + 50);
-            //x_ratio = (1 - x_ratio);
-            //double y_ratio = (y_kinect - topLeft.Y + 20) / (double)(textileHeight + 30);
-
-            //// The constants at the end of these equations move the dot horizontally and vertically in all cases
-            //double x = (x_ratio * drawController.drawingCanvas.Width) - 108;
-            //double y = (y_ratio * drawController.drawingCanvas.Height);
-
-            double x = x_kinect * calibration_coefficients[0] + y_kinect * calibration_coefficients[1] + calibration_coefficients[2] - 50;
-            double y = x_kinect * calibration_coefficients[3] + y_kinect * calibration_coefficients[4] + calibration_coefficients[5] - 20;
+            double x = x_kinect * calibration_coefficients[0] + y_kinect * calibration_coefficients[1] + calibration_coefficients[2] - 0;
+            double y = x_kinect * calibration_coefficients[3] + y_kinect * calibration_coefficients[4] + calibration_coefficients[5];
 
             x = drawController.drawingCanvas.Width - x;
-            Console.WriteLine("Drawing at " + x + ", " + y);
+            //Console.WriteLine("Drawing at " + x + ", " + y);
 
             drawController.DrawEllipseAtPoint(x, y, (DepthThreshold - minDepth));
         }
@@ -201,7 +189,7 @@ namespace KinectColorApp
 
         #region Image creation
 
-        private byte[] GenerateColoredBytes(DepthImageFrame depthFrame)
+        public byte[] GenerateColoredBytes(DepthImageFrame depthFrame)
         {
             short[] rawDepthData = new short[depthFrame.PixelDataLength];
             depthFrame.CopyPixelDataTo(rawDepthData);

@@ -40,14 +40,18 @@ namespace KinectColorApp
         {
             using (ColorImageFrame colorFrame = e.OpenColorImageFrame())
             {
-                if (colorFrame != null)
+                if (colorFrame == null) return;
+
+                using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
                 {
+                    if (depthFrame == null) return;
+
                     byte[] pixels = new byte[colorFrame.PixelDataLength];
                     colorFrame.CopyPixelDataTo(pixels);
                     int stride = colorFrame.Width * 4;
                     //debugImage.Source = BitmapSource.Create(colorFrame.Width, colorFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
 
-                    int code_num = find_code(colorFrame);
+                    int code_num = find_code(colorFrame, depthFrame);
                     if (code_num >= 0)
                     {
                         // Make the next code visible.
@@ -61,19 +65,19 @@ namespace KinectColorApp
                             // We are done. Calculate the coefficients.
                             sensor.AllFramesReady -= this.CalibrationAllFramesReady;
                             codes[8].Visibility = Visibility.Hidden;
+
                             kinectController.calibration_coefficients = get_calibration_coeffs();
-                            Point center_top_left = code_points[0];//codes[0].TransformToAncestor(canvas).Transform(new Point(codes[0].ActualWidth / 2, codes[0].ActualHeight / 2));
-                            Point center_bot_right = code_points[4];//codes[4].TransformToAncestor(canvas).Transform(new Point(codes[4].ActualWidth / 2, codes[4].ActualHeight / 2));
+                            Point center_top_left = code_points[0];
+                            Point center_bot_right = code_points[4];
                             kinectController.Calibrate((int)center_top_left.X, (int)center_top_left.Y, (int)center_bot_right.X, (int)center_bot_right.Y);
                             sensor.AllFramesReady += kinectController.SensorAllFramesReady;
-
                         }
                     }
                 }
             }
         }
 
-        int find_code(ColorImageFrame colorFrame)
+        int find_code(ColorImageFrame colorFrame, DepthImageFrame depthFrame)
         {
             ZXing.Kinect.BarcodeReader reader = new ZXing.Kinect.BarcodeReader();
             if (colorFrame != null)
@@ -86,10 +90,22 @@ namespace KinectColorApp
                     int code_num = Convert.ToInt32(val);
                     double center_x = result.ResultPoints[0].X +0.5 * (result.ResultPoints[2].X - result.ResultPoints[0].X);
                     double center_y = result.ResultPoints[0].Y +0.5 * (result.ResultPoints[2].Y - result.ResultPoints[0].Y);
-                    Point p = new Point(center_x, center_y);
+
+                    // Map the color frame onto the depth frame
+                    DepthImagePixel[] depthPixel = new DepthImagePixel[depthFrame.PixelDataLength];
+                    depthFrame.CopyDepthImagePixelDataTo(depthPixel);
+
+                    DepthImagePoint[] depthImagePoints = new DepthImagePoint[sensor.DepthStream.FramePixelDataLength];
+                    sensor.CoordinateMapper.MapColorFrameToDepthFrame(sensor.ColorStream.Format, sensor.DepthStream.Format, depthPixel, depthImagePoints);
+
+                    // Get the point in the depth frame at the center of the barcode
+                    int center_point_color_index = (int)center_y * 640 + (int)center_x;
+                    DepthImagePoint converted_depth_point = depthImagePoints[center_point_color_index];
+                    Point p = new Point(converted_depth_point.X, converted_depth_point.Y);
                     code_points[code_num] = p;
 
-                    Console.WriteLine("Found code " + code_num + " at (" + center_x + ", " + center_y + ")");
+                    Console.WriteLine("Found code " + code_num + " at (" + center_x + ", " + center_y + ") in color coordinates.");
+                    Console.WriteLine("Translated to (" + converted_depth_point.X + ", " + converted_depth_point.Y + ") in depth coordinates.");
                     return code_num;
                 }
             }

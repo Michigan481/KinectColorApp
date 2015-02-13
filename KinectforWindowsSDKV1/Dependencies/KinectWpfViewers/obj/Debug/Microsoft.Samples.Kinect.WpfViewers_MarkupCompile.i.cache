@@ -13,8 +13,8 @@ DEBUG;TRACE
 7-1694449150
 
 14801785492
-1355659973
+13-216429321
 KinectSensorChooser.xaml;KinectAudioViewer.xaml;KinectDepthViewer.xaml;KinectColorViewer.xaml;KinectDiagnosticViewer.xaml;KinectSettings.xaml;KinectSkeletonViewer.xaml;
 
-False
+True
 
