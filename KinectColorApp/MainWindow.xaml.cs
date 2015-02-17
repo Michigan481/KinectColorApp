@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using Microsoft.Kinect;
 using System.Threading;
 using System.Windows.Threading;
+using System.Windows.Media.Animation;
 
 namespace KinectColorApp
 {
@@ -32,7 +33,6 @@ namespace KinectColorApp
             backgroundImage.Height = drawingGrid.ActualHeight;
             backgroundImage.Visibility = Visibility.Hidden;
             colorRect.Visibility = Visibility.Hidden;
-            calibrationLabel.Visibility = Visibility.Hidden;
 
             drawController = new DrawController(drawingCanvas, backgroundImage, colorRect);
             soundController = new SoundController();
@@ -56,18 +56,16 @@ namespace KinectColorApp
 
                 if (this.sensor.Status == KinectStatus.Connected)
                 {
-                    Image[] codes = new Image[] { _0_code, _1_code, _2_code, _3_code, _4_code, _5_code, _6_code, _7_code, _8_code };
+                    Image[] codes = new Image[] { _0_code, _1_code, _2_code, _3_code, _4_code,};
                     foreach (Image i in codes)
                     {
                         i.Visibility = Visibility.Hidden;
                     }
-                    _0_code.Visibility = Visibility.Visible;
                     calController = new CalibrationController(sensor, kinectController, drawingCanvas, codes, image1);
+                    calController.CalibrationDidComplete += new CalibrationController.calibrationDidCompleteHandler(calibrationCompleted);
 
                     this.sensor.ColorStream.Enable();
                     this.sensor.DepthStream.Enable();
-                    this.sensor.AllFramesReady += calController.CalibrationAllFramesReady;
-                    this.sensor.Start();
                 }
             }
 
@@ -93,24 +91,33 @@ namespace KinectColorApp
             backgroundImage.Height = drawingGrid.ActualHeight - 40;
         }
 
+        private void calibrationCompleted()
+        {
+            calibrationLabel.Content = "Done!";
+            DoubleAnimation newAnimation = new DoubleAnimation();
+            newAnimation.From = calibrationLabel.Opacity;
+            newAnimation.To = 0.0;
+            newAnimation.Duration = new System.Windows.Duration(TimeSpan.FromSeconds(2));
+            newAnimation.AutoReverse = false;
+
+            calibrationLabel.BeginAnimation(MediaElement.OpacityProperty, newAnimation, HandoffBehavior.SnapshotAndReplace);
+
+            colorRect.Visibility = Visibility.Visible;
+            backgroundImage.Visibility = Visibility.Visible;
+            Canvas.SetZIndex(calibrationLabel, 2);
+            Canvas.SetZIndex(backgroundImage, 1);
+        }
+
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             Console.WriteLine(e.Key.ToString());
             if (!has_started_calibrating)
             {
+                _0_code.Visibility = Visibility.Visible;
+                this.sensor.AllFramesReady += calController.CalibrationAllFramesReady;
+                this.sensor.Start();
                 calibrationLabel.Content = "Calibrating...";
                 has_started_calibrating = true;
-
-               // _0_code.Visibility = Visibility.Visible;
-                //_1_code.Visibility = Visibility.Visible;
-                //_2_code.Visibility = Visibility.Visible;
-                //_3_code.Visibility = Visibility.Visible;
-                //_4_code.Visibility = Visibility.Visible;
-
-                //image1.Visibility = Visibility.Visible;
-
-                //Point center = _0_code.TransformToAncestor(drawingCanvas).Transform(new Point(_0_code.ActualWidth / 2, _0_code.ActualHeight / 2));
-                //drawController.DrawEllipseAtPoint(center.X, center.Y, 20);
             }
 
             if (e.Key.ToString() == "R") {

@@ -23,7 +23,11 @@ namespace KinectColorApp
         private Image debugImage;
 
         Image[] codes;
-        Point[] code_points = new Point[9];
+        Point[] code_points = new Point[5];
+        Point code_size;
+
+        public delegate void calibrationDidCompleteHandler();
+        public event calibrationDidCompleteHandler CalibrationDidComplete;
 
         public CalibrationController(KinectSensor sensor, KinectController kinectController, Canvas canvas, Image[] codes, Image debugImage)
         {
@@ -53,7 +57,7 @@ namespace KinectColorApp
                     if (code_num >= 0)
                     {
                         // Make the next code visible.
-                        if (code_num < 8)
+                        if (code_num < 4)
                         {
                             codes[code_num].Visibility = Visibility.Hidden;
                             codes[code_num + 1].Visibility = Visibility.Visible;
@@ -62,13 +66,14 @@ namespace KinectColorApp
                         {
                             // We are done. Calculate the coefficients.
                             sensor.AllFramesReady -= this.CalibrationAllFramesReady;
-                            codes[8].Visibility = Visibility.Hidden;
+                            codes[4].Visibility = Visibility.Hidden;
                             kinectController.calibration_coefficients = get_calibration_coeffs();
                             
                             Point center_top_left = code_points[0];
                             Point center_bot_right = code_points[4];
-                            kinectController.Calibrate((int)center_top_left.X, (int)center_top_left.Y, (int)center_bot_right.X, (int)center_bot_right.Y);
+                            kinectController.Calibrate((int)(center_top_left.X + code_size.X), (int)(center_top_left.Y + 1.25*code_size.Y), (int)(center_bot_right.X - code_size.X), (int)(center_bot_right.Y - 1.25*code_size.Y));
                             sensor.AllFramesReady += kinectController.SensorAllFramesReady;
+                            CalibrationDidComplete();
                         }
                     }
                 }
@@ -88,6 +93,8 @@ namespace KinectColorApp
                     int code_num = Convert.ToInt32(val);
                     double center_x = result.ResultPoints[0].X + 0.5 * (result.ResultPoints[2].X - result.ResultPoints[0].X);
                     double center_y = result.ResultPoints[0].Y + 0.5 * (result.ResultPoints[2].Y - result.ResultPoints[0].Y);
+
+                    code_size = new Point((result.ResultPoints[2].X - result.ResultPoints[0].X), (result.ResultPoints[2].Y - result.ResultPoints[0].Y));
 
                     // Must mirror the coordinate here -- the depth frame comes in mirrored.
                     center_x = 640 - center_x;
@@ -118,8 +125,8 @@ namespace KinectColorApp
             double[] coeffs = new double[6];
 
             // Make the Z matrix
-            Matrix Z = new Matrix(9, 3);
-            for (int i = 0; i < 9; i++)
+            Matrix Z = new Matrix(5, 3);
+            for (int i = 0; i < 5; i++)
             {
                 Z[i, 0] = code_points[i].X;
                 Z[i, 1] = code_points[i].Y;
@@ -127,9 +134,9 @@ namespace KinectColorApp
             }
 
             // Make the display_x and display_y matrices
-            Matrix D_x = new Matrix(9, 1);
-            Matrix D_y = new Matrix(9, 1);
-            for (int i = 0; i < 9; i++)
+            Matrix D_x = new Matrix(5, 1);
+            Matrix D_y = new Matrix(5, 1);
+            for (int i = 0; i < 5; i++)
             {
                 // Get the position of the code
                 Point center = codes[i].TransformToAncestor(canvas).Transform(new Point(codes[i].ActualWidth / 2, codes[i].ActualHeight / 2));

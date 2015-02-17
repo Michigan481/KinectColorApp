@@ -22,12 +22,8 @@
             <Image x:Name="_2_code" Height="225" Canvas.Left="236" Canvas.Top="151" Width="225" Source="Resources/2_code.png"/>
             <Image x:Name="_3_code" Height="225" Canvas.Left="476" Canvas.Top="-17" Width="225" Source="Resources/3_code.png"/>
             <Image x:Name="_4_code" Height="225" Canvas.Left="476" Canvas.Top="280" Width="225" Source="Resources/4_code.png"/>
-            <Image x:Name="_5_code" Height="224" Canvas.Left="38" Canvas.Top="185" Width="224" Source="Resources/5_code.png"/>
-            <Image x:Name="_6_code" Height="224" Canvas.Left="289" Canvas.Top="30" Width="224" Source="Resources/6_code.png"/>
-            <Image x:Name="_7_code" Height="224" Canvas.Left="339" Canvas.Top="236" Width="224" Source="Resources/7_code.png"/>
-            <Image x:Name="_8_code" Height="224" Canvas.Left="161" Canvas.Top="289" Width="224" Source="Resources/8_code.png"/>
+            <Label x:Name="calibrationLabel" Content="Welcome! Press any button to calibrate." HorizontalContentAlignment="Center"  VerticalAlignment="Center" Height="47" FontFamily="Segoe Marker" FontSize="30" Canvas.Left="125" Canvas.Top="373" HorizontalAlignment="Center"/>
         </Canvas>
-        <Label x:Name="calibrationLabel" Content="Welcome! Press any button to calibrate." HorizontalAlignment="Left" Margin="-21,464,0,0" VerticalAlignment="Top" Grid.ColumnSpan="4" Width="529" Height="56" FontFamily="Segoe Marker" FontSize="36"/>
 
     </Grid>
 </Window>
