@@ -162,8 +162,8 @@ namespace KinectColorApp
             myEllipse.StrokeThickness = 0;
 
             // Set the width and height of the Ellipse.
-            myEllipse.Width = 25 + 25 * (depth / 60.0);
-            myEllipse.Height = 25 + 25 * (depth / 60.0);
+            myEllipse.Width = 20 + 15 * (depth / 60.0);
+            myEllipse.Height = 20 + 15 * (depth / 60.0);
 
             Canvas.SetTop(myEllipse, y - myEllipse.Height/2);
             Canvas.SetLeft(myEllipse, x - myEllipse.Width/2);

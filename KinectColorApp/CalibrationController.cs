@@ -21,19 +21,17 @@ namespace KinectColorApp
         private KinectController kinectController;
         private Canvas canvas;
         private Image debugImage;
-        DrawController dc;
 
         Image[] codes;
         Point[] code_points = new Point[9];
 
-        public CalibrationController(KinectSensor sensor, KinectController kinectController, Canvas canvas, Image[] codes, Image debugImage, DrawController dc)
+        public CalibrationController(KinectSensor sensor, KinectController kinectController, Canvas canvas, Image[] codes, Image debugImage)
         {
             this.canvas = canvas;
             this.codes = codes;
             this.debugImage = debugImage;
             this.kinectController = kinectController;
             this.sensor = sensor;
-            this.dc = dc;
         }
 
         public void CalibrationAllFramesReady(object sender, AllFramesReadyEventArgs e)
@@ -46,9 +44,9 @@ namespace KinectColorApp
                 {
                     if (depthFrame == null) return;
 
-                    byte[] pixels = new byte[colorFrame.PixelDataLength];
-                    colorFrame.CopyPixelDataTo(pixels);
-                    int stride = colorFrame.Width * 4;
+                    //byte[] pixels = new byte[colorFrame.PixelDataLength];
+                    //colorFrame.CopyPixelDataTo(pixels);
+                    //int stride = colorFrame.Width * 4;
                     //debugImage.Source = BitmapSource.Create(colorFrame.Width, colorFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
 
                     int code_num = find_code(colorFrame, depthFrame);
@@ -65,8 +63,8 @@ namespace KinectColorApp
                             // We are done. Calculate the coefficients.
                             sensor.AllFramesReady -= this.CalibrationAllFramesReady;
                             codes[8].Visibility = Visibility.Hidden;
-
                             kinectController.calibration_coefficients = get_calibration_coeffs();
+                            
                             Point center_top_left = code_points[0];
                             Point center_bot_right = code_points[4];
                             kinectController.Calibrate((int)center_top_left.X, (int)center_top_left.Y, (int)center_bot_right.X, (int)center_bot_right.Y);
@@ -88,13 +86,15 @@ namespace KinectColorApp
                 {
                     string val = result.Text;
                     int code_num = Convert.ToInt32(val);
-                    double center_x = result.ResultPoints[0].X +0.5 * (result.ResultPoints[2].X - result.ResultPoints[0].X);
-                    double center_y = result.ResultPoints[0].Y +0.5 * (result.ResultPoints[2].Y - result.ResultPoints[0].Y);
+                    double center_x = result.ResultPoints[0].X + 0.5 * (result.ResultPoints[2].X - result.ResultPoints[0].X);
+                    double center_y = result.ResultPoints[0].Y + 0.5 * (result.ResultPoints[2].Y - result.ResultPoints[0].Y);
+
+                    // Must mirror the coordinate here -- the depth frame comes in mirrored.
+                    center_x = 640 - center_x;
 
                     // Map the color frame onto the depth frame
                     DepthImagePixel[] depthPixel = new DepthImagePixel[depthFrame.PixelDataLength];
                     depthFrame.CopyDepthImagePixelDataTo(depthPixel);
-
                     DepthImagePoint[] depthImagePoints = new DepthImagePoint[sensor.DepthStream.FramePixelDataLength];
                     sensor.CoordinateMapper.MapColorFrameToDepthFrame(sensor.ColorStream.Format, sensor.DepthStream.Format, depthPixel, depthImagePoints);
 
@@ -105,7 +105,7 @@ namespace KinectColorApp
                     code_points[code_num] = p;
 
                     Console.WriteLine("Found code " + code_num + " at (" + center_x + ", " + center_y + ") in color coordinates.");
-                    Console.WriteLine("Translated to (" + converted_depth_point.X + ", " + converted_depth_point.Y + ") in depth coordinates.");
+                    Console.WriteLine("Translated to (" + p.X + ", " + p.Y + ") in depth coordinates.");
                     return code_num;
                 }
             }

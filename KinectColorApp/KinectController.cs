@@ -17,17 +17,14 @@ namespace KinectColorApp
         private DrawController drawController;
         private SoundController soundController;
 
-        private bool isCalibrated = false;
         private bool hasSetDepthThreshold = false;
         private int DepthThreshold = 9000000;
-        const int TextileSpacing = 7; // How deep do we have to push in to start drawing?
-        public double[] calibration_coefficients;
+        const int TextileSpacing = 15; // How deep do we have to push in to start drawing?
 
-        // Store the location and size of the textile in Kinect coordinates
+        // Variables used for calibration
+        public double[] calibration_coefficients;
         private Point topLeft;
         private Point bottomRight;
-        private int textileWidth;
-        private int textileHeight;
 
         public KinectController(DrawController dController, Image image, SoundController sController)
         {
@@ -40,9 +37,6 @@ namespace KinectColorApp
         {
             topLeft = new Point(top_left_x, top_left_y);
             bottomRight = new Point(bottom_right_x, bottom_right_y);
-            textileWidth = bottom_right_x - top_left_x;
-            textileHeight = bottom_right_y - top_left_y;
-            this.isCalibrated = true;
         }
 
         public void SensorAllFramesReady(object sender, AllFramesReadyEventArgs e)
@@ -61,47 +55,10 @@ namespace KinectColorApp
 
             using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
             {
-                if (depthFrame == null) return;
-
-                if (this.isCalibrated) {
-                    this.ParseDepthFrame(depthFrame);
-
-                    //byte[] pixels = this.GenerateColoredBytes(depthFrame);
-                    //int stride = depthFrame.Width * 4;
-                    //debugImage.Source = BitmapSource.Create(depthFrame.Width, depthFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
-                }
-                else
+                if (depthFrame != null)
                 {
-                    // Display depth visualization in debug image by uncommenting below:
-                    //byte[] pixels = this.GenerateColoredBytes(depthFrame);
-                    //int stride = depthFrame.Width * 4;
-                    //debugImage.Source = BitmapSource.Create(depthFrame.Width, depthFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
-
-                    // Display color video in debug image
-                    using (ColorImageFrame colorFrame = e.OpenColorImageFrame())
-                    {
-                        if (colorFrame != null)
-                        {
-                            //byte[] pixels = new byte[colorFrame.PixelDataLength];
-                            //colorFrame.CopyPixelDataTo(pixels);
-                            //int stride = colorFrame.Width * 4;
-                            //debugImage.Source = BitmapSource.Create(colorFrame.Width, colorFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
-                            debugImage.Visibility = Visibility.Hidden;
-
-                            Console.WriteLine("A: " + calibration_coefficients[0]);
-                            Console.WriteLine("B: " + calibration_coefficients[1]);
-                            Console.WriteLine("C: " + calibration_coefficients[2]);
-                            Console.WriteLine("D: " + calibration_coefficients[3]);
-                            Console.WriteLine("E: " + calibration_coefficients[4]);
-                            Console.WriteLine("F: " + calibration_coefficients[5]);
-                            isCalibrated = true;
-
-                            //drawController.backgroundImage.Visibility = Visibility.Visible;
-                            //Canvas.SetZIndex(drawController.backgroundImage, 2);
-                        }
-                    }
-                }
-                
+                    this.ParseDepthFrame(depthFrame);
+                } 
             }
         }
 
@@ -116,25 +73,17 @@ namespace KinectColorApp
 
             int minDepth = DepthThreshold;
             int bestDepthIndex = -1;
-
-            // Loop through data and set colors for each pixel
             int minDepthIndex = (int)this.topLeft.Y * depthFrame.Width;
             int maxDepthIndex = (int)this.bottomRight.Y * depthFrame.Width;
-
-            //Console.WriteLine("Depth Threshold: " + DepthThreshold);
 
             for (int depthIndex = minDepthIndex; depthIndex < maxDepthIndex; depthIndex++)
             {
                 // Skip this depth index if it's horizontally outside of our textile
                 int x_kinect = (int)((depthIndex) % depthFrame.Width);
-                if (x_kinect < topLeft.X)
-                {
-                    continue;
-                }
+                if (x_kinect < topLeft.X) { continue; }
                 else if (x_kinect > bottomRight.X)
                 {
                     depthIndex += (depthFrame.Width - (int)(bottomRight.X - topLeft.X - 1));
-                    //Console.WriteLine(depthFrame.Width - (int)(bottomRight.X - topLeft.X - 1));
                     continue;
                 }
 
@@ -176,11 +125,8 @@ namespace KinectColorApp
             double x_kinect = (depthIndex % depthFrame.Width);
             double y_kinect = (depthIndex / depthFrame.Width);
 
-            double x = x_kinect * calibration_coefficients[0] + y_kinect * calibration_coefficients[1] + calibration_coefficients[2] - 0;
-            double y = x_kinect * calibration_coefficients[3] + y_kinect * calibration_coefficients[4] + calibration_coefficients[5];
-
-            x = drawController.drawingCanvas.Width - x;
-            //Console.WriteLine("Drawing at " + x + ", " + y);
+            double x = x_kinect * calibration_coefficients[0] + y_kinect * calibration_coefficients[1] + calibration_coefficients[2] + 3;
+            double y = x_kinect * calibration_coefficients[3] + y_kinect * calibration_coefficients[4] + calibration_coefficients[5] - 5;
 
             drawController.DrawEllipseAtPoint(x, y, (DepthThreshold - minDepth));
         }
@@ -189,6 +135,24 @@ namespace KinectColorApp
 
         #region Image creation
 
+        // Call this function inside AllFramesReady to display a depth debugging feed
+        void display_depth_feed(DepthImageFrame depthFrame)
+        {
+            byte[] pixels = this.GenerateColoredBytes(depthFrame);
+            int stride = depthFrame.Width * 4;
+            debugImage.Source = BitmapSource.Create(depthFrame.Width, depthFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
+        }
+
+        // Call this function inside AllFramesReady to display a color debugging feed
+        void display_color_feed(ColorImageFrame colorFrame)
+        {
+            byte[] pixels = new byte[colorFrame.PixelDataLength];
+            colorFrame.CopyPixelDataTo(pixels);
+            int stride = colorFrame.Width * 4;
+            debugImage.Source = BitmapSource.Create(colorFrame.Width, colorFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
+        }
+
+        // Generates a color image from the depth frame
         public byte[] GenerateColoredBytes(DepthImageFrame depthFrame)
         {
             short[] rawDepthData = new short[depthFrame.PixelDataLength];

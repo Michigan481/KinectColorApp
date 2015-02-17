@@ -62,7 +62,7 @@ namespace KinectColorApp
                         i.Visibility = Visibility.Hidden;
                     }
                     _0_code.Visibility = Visibility.Visible;
-                    calController = new CalibrationController(sensor, kinectController, drawingCanvas, codes, image1, drawController);
+                    calController = new CalibrationController(sensor, kinectController, drawingCanvas, codes, image1);
 
                     this.sensor.ColorStream.Enable();
                     this.sensor.DepthStream.Enable();
@@ -109,8 +109,8 @@ namespace KinectColorApp
 
                 //image1.Visibility = Visibility.Visible;
 
-                    //Point center = _0_code.TransformToAncestor(drawingCanvas).Transform(new Point(_0_code.ActualWidth / 2, _0_code.ActualHeight / 2));
-                    //drawController.DrawEllipseAtPoint(center.X, center.Y, 20);
+                //Point center = _0_code.TransformToAncestor(drawingCanvas).Transform(new Point(_0_code.ActualWidth / 2, _0_code.ActualHeight / 2));
+                //drawController.DrawEllipseAtPoint(center.X, center.Y, 20);
             }
 
             if (e.Key.ToString() == "R") {
