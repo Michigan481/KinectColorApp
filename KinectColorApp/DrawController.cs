@@ -179,7 +179,10 @@ namespace KinectColorApp
             var shapes = drawingCanvas.Children.OfType<Ellipse>().ToList();
             foreach (var shape in shapes)
             {
-                drawingCanvas.Children.Remove(shape);
+                if (shape.Name != "red_selector" && shape.Name != "blue_selector" && shape.Name != "green_selector")
+                {
+                    drawingCanvas.Children.Remove(shape);
+                }
             }
         }
     }

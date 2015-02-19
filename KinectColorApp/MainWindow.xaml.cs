@@ -34,9 +34,10 @@ namespace KinectColorApp
             backgroundImage.Visibility = Visibility.Hidden;
             colorRect.Visibility = Visibility.Hidden;
 
+            buttons = new Ellipse[] { red_selector, blue_selector, green_selector };
             drawController = new DrawController(drawingCanvas, backgroundImage, colorRect);
             soundController = new SoundController();
-            kinectController = new KinectController(drawController, image1, soundController);
+            kinectController = new KinectController(drawController, image1, soundController, buttons);
             //galileoController = new GalileoController(drawController, soundController, "COM3", 9600);
         }
 
@@ -47,6 +48,7 @@ namespace KinectColorApp
         private GalileoController galileoController;
         private KinectSensor sensor;
         bool has_started_calibrating = false;
+        Ellipse[] buttons;
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -77,6 +79,11 @@ namespace KinectColorApp
             // Faded colored rectangle:
             colorRect.Width = drawingCanvas.ActualWidth;
             Canvas.SetZIndex(colorRect, 11);
+
+            foreach (Ellipse ellipse in buttons)
+            {
+                ellipse.Visibility = Visibility.Hidden;
+            }
         }
 
         private void Window_Size_Did_Change(object sender, RoutedEventArgs e)
@@ -89,6 +96,7 @@ namespace KinectColorApp
 
             backgroundImage.Width = drawingGrid.ActualWidth - 40;
             backgroundImage.Height = drawingGrid.ActualHeight - 40;
+            Canvas.SetLeft(backgroundImage, 0);
         }
 
         private void calibrationCompleted()
@@ -106,6 +114,13 @@ namespace KinectColorApp
             backgroundImage.Visibility = Visibility.Visible;
             Canvas.SetZIndex(calibrationLabel, 2);
             Canvas.SetZIndex(backgroundImage, 1);
+
+            foreach (Ellipse ellipse in buttons)
+            {
+                Canvas.SetLeft(ellipse, drawingCanvas.Width - ellipse.Width - 5);
+                ellipse.Visibility = Visibility.Visible;
+                Canvas.SetZIndex(ellipse, 2);
+            }
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)

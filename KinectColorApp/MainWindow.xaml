@@ -4,6 +4,9 @@
         xmlns:WpfViewers="clr-namespace:Microsoft.Samples.Kinect.WpfViewers;assembly=Microsoft.Samples.Kinect.WpfViewers" x:Class="KinectColorApp.MainWindow"
         Title="MainWindow" Height="718.178" Width="910.892" Loaded="Window_Loaded" Closing="Window_Closing" SizeChanged="Window_Size_Did_Change" WindowStyle="None" WindowState="Maximized">
     <Grid x:Name="drawingGrid">
+        <Grid.Background>
+            <ImageBrush/>
+        </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="101*"/>
             <ColumnDefinition Width="38*"/>
@@ -15,14 +18,19 @@
         <Canvas x:Name="drawingCanvas" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Grid.ColumnSpan="4">
             <Image x:Name="backgroundImage" HorizontalAlignment="Left" Height="400" VerticalAlignment="Top" Width="600" Canvas.Top="20" Canvas.Left="20"/>
             <Rectangle x:Name="drawBorder" Height="480" Stroke="White" Width="640" StrokeThickness="20"/>
-            <Image x:Name="image1" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Canvas.Left="10" Canvas.Top="10"/>
             <Rectangle x:Name="colorRect" StrokeThickness="20" Fill="Red" Height="20" Canvas.Top="493" Width="642"/>
+            <Image x:Name="image1" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Canvas.Left="10" Canvas.Top="10"/>
             <Image x:Name="_0_code" Height="224" Canvas.Left="-16" Canvas.Top="-16" Width="225" Source="Resources/0_code.png"/>
             <Image x:Name="_1_code" Height="225" Canvas.Left="-11" Canvas.Top="265" Width="225" Source="Resources/1_code.png"/>
             <Image x:Name="_2_code" Height="225" Canvas.Left="236" Canvas.Top="151" Width="225" Source="Resources/2_code.png"/>
             <Image x:Name="_3_code" Height="225" Canvas.Left="476" Canvas.Top="-17" Width="225" Source="Resources/3_code.png"/>
             <Image x:Name="_4_code" Height="225" Canvas.Left="476" Canvas.Top="280" Width="225" Source="Resources/4_code.png"/>
             <Label x:Name="calibrationLabel" Content="Welcome! Press any button to calibrate." HorizontalContentAlignment="Center"  VerticalAlignment="Center" Height="47" FontFamily="Segoe Marker" FontSize="30" Canvas.Left="125" Canvas.Top="373" HorizontalAlignment="Center"/>
+            <Ellipse x:Name="red_selector" HorizontalAlignment="Left" Height="48" Stroke="Black" VerticalAlignment="Top" Width="48" Fill="#FFFF2C2C" Canvas.Left="602" Canvas.Top="425"/>
+            <Ellipse x:Name="green_selector" HorizontalAlignment="Left" Height="48" Stroke="Black" VerticalAlignment="Top" Width="48" Fill="#FF35FF35" Canvas.Left="602" Canvas.Top="373"/>
+            <Ellipse x:Name="blue_selector" HorizontalAlignment="Left" Height="47" Stroke="Black" VerticalAlignment="Top" Width="48" Fill="#FF734EFF" Canvas.Left="602" Canvas.Top="323"/>
+
+
         </Canvas>
 
     </Grid>
