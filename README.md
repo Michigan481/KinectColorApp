@@ -11,3 +11,12 @@ Key Commands:
 R: Refresh Screen
 B: Change Background
 Q: Quit
+
+MakeyMakey Key Commands:
+W: Red Color
+A: Green Color
+S: Blue Color
+D: Eraser
+F: Refresh Screen
+G: Change Background
+SPACE: Quit

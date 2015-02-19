@@ -120,24 +120,45 @@ namespace KinectColorApp
                 has_started_calibrating = true;
             }
 
-            if (e.Key.ToString() == "R") {
+            if (e.Key.ToString() == "R" || e.Key.ToString() == "F") {
                 drawController.ClearScreen();
             }
-            else if (e.Key.ToString() == "B")
+            else if (e.Key.ToString() == "B" || e.Key.ToString() == "G")
             {
                 soundController.TriggerBackgroundEffect();
                 drawController.CycleBackgrounds();
             }
-            else if (e.Key.ToString() == "Q")
+            else if (e.Key.ToString() == "Q" || e.Key.ToString() == "Space")
             {
                 Application.Current.Shutdown();
             }
-            else if (e.Key >= Key.D0 && e.Key <= Key.D3)
+            else if ((e.Key >= Key.D0 && e.Key <= Key.D3) || e.Key == Key.W || e.Key == Key.A || e.Key == Key.S)
             {
-                Colors c = (Colors)(e.Key - Key.D0);
-                soundController.TriggerColorEffect((int)c);
-                drawController.ChangeColor(c);
+                if (e.Key == Key.W)
+                {
+                    HandleColorChange(0);
+                }
+                else if (e.Key == Key.A)
+                {
+                    HandleColorChange(1);
+                }
+                else if (e.Key == Key.S)
+                {
+                    HandleColorChange(2);
+                }
+                else
+                {
+                    HandleColorChange(e.Key - Key.D0);
+                }
+
             }
+        }
+
+        void HandleColorChange(int inColor)
+        {
+            Colors c = (Colors)(inColor);
+            soundController.TriggerColorEffect((int)c);
+            drawController.ChangeColor(c);
         }
 
         void StopKinect(KinectSensor sensor)
