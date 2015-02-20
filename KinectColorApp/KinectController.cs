@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Kinect;
+using System.Windows.Shapes;
 
 namespace KinectColorApp
 {
@@ -16,6 +17,7 @@ namespace KinectColorApp
         private Image debugImage;
         private DrawController drawController;
         private SoundController soundController;
+        Ellipse[] buttons;
 
         private bool hasSetDepthThreshold = false;
         private int DepthThreshold = 9000000;
@@ -26,11 +28,12 @@ namespace KinectColorApp
         private Point topLeft;
         private Point bottomRight;
 
-        public KinectController(DrawController dController, Image image, SoundController sController)
+        public KinectController(DrawController dController, Image image, SoundController sController, Ellipse[] buttons)
         {
             debugImage = image;
             drawController = dController;
             soundController = sController;
+            this.buttons = buttons;
         }
 
         public void Calibrate(int top_left_x, int top_left_y, int bottom_right_x, int bottom_right_y)
@@ -75,11 +78,12 @@ namespace KinectColorApp
             int bestDepthIndex = -1;
             int minDepthIndex = (int)this.topLeft.Y * depthFrame.Width;
             int maxDepthIndex = (int)this.bottomRight.Y * depthFrame.Width;
-
+            
             for (int depthIndex = minDepthIndex; depthIndex < maxDepthIndex; depthIndex++)
             {
                 // Skip this depth index if it's horizontally outside of our textile
                 int x_kinect = (int)((depthIndex) % depthFrame.Width);
+                
                 if (x_kinect < topLeft.X) { continue; }
                 else if (x_kinect > bottomRight.X)
                 {
@@ -88,9 +92,10 @@ namespace KinectColorApp
                 }
 
                 int depth = rawDepthData[depthIndex] >> DepthImageFrame.PlayerIndexBitmaskWidth;
-
+                
                 // Ignore invalid depth values
                 if (depth == -1 || depth == 0) continue;
+                
 
                 if (depth < minDepth)
                 {
@@ -102,6 +107,7 @@ namespace KinectColorApp
             // Draw if a touch was found
             if (bestDepthIndex >= 0)
             {
+                Console.WriteLine("here");
                 if (!this.hasSetDepthThreshold) {
                     this.DepthThreshold = minDepth - TextileSpacing;
                     this.hasSetDepthThreshold = true;
@@ -127,7 +133,30 @@ namespace KinectColorApp
 
             double x = x_kinect * calibration_coefficients[0] + y_kinect * calibration_coefficients[1] + calibration_coefficients[2] + 3;
             double y = x_kinect * calibration_coefficients[3] + y_kinect * calibration_coefficients[4] + calibration_coefficients[5] - 5;
-
+            
+            foreach (Ellipse ellipse in buttons)
+            {
+                double top = Canvas.GetTop(ellipse);
+                double left = Canvas.GetLeft(ellipse);
+                
+                if (y >= top && x >= left && y <= top + ellipse.Height && x <= left + ellipse.Width)
+                {
+                    // Use this button
+                    if (ellipse.Name == "red_selector")
+                    {
+                        drawController.ChangeColor(Colors.Red);
+                    }
+                    else if (ellipse.Name == "green_selector")
+                    {
+                        drawController.ChangeColor(Colors.Green);
+                    }
+                    else if (ellipse.Name == "blue_selector")
+                    {
+                        drawController.ChangeColor(Colors.Blue);
+                    }
+                    return;
+                }
+            }
             drawController.DrawEllipseAtPoint(x, y, (DepthThreshold - minDepth));
         }
 
