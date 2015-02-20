@@ -24,12 +24,14 @@ namespace KinectColorApp
         public Canvas drawingCanvas;
         public Image backgroundImage;
         public Rectangle colorRect;
+        public Image canvasImage;
 
-        public DrawController(Canvas canvas, Image image, Rectangle rect)
+        public DrawController(Canvas canvas, Image image, Rectangle rect, Image canvasImage)
         {
             drawingCanvas = canvas;
             backgroundImage = image;
             colorRect = rect;
+            this.canvasImage = canvasImage;
         }
 
         public void CycleBackgrounds()
@@ -175,6 +177,37 @@ namespace KinectColorApp
 
         public void ClearScreen()
         {
+            // Remove ellipses only
+            var shapes = drawingCanvas.Children.OfType<Ellipse>().ToList();
+            foreach (var shape in shapes)
+            {
+                if (shape.Name != "red_selector" && shape.Name != "blue_selector" && shape.Name != "green_selector")
+                {
+                    drawingCanvas.Children.Remove(shape);
+                }
+            }
+
+            canvasImage.Source = null;
+        }
+
+        public void SaveCanvas()
+        {
+            Size size = new Size(System.Windows.SystemParameters.PrimaryScreenWidth, System.Windows.SystemParameters.PrimaryScreenHeight);
+            drawingCanvas.Measure(size);
+            backgroundImage.Visibility = Visibility.Hidden;
+            colorRect.Visibility = Visibility.Hidden;
+            var rtb = new RenderTargetBitmap(
+                (int)System.Windows.SystemParameters.PrimaryScreenWidth, //width 
+                (int)System.Windows.SystemParameters.PrimaryScreenHeight, //height 
+                96, //dpi x 
+                96, //dpi y 
+                PixelFormats.Pbgra32 // pixelformat 
+                );
+            rtb.Render(drawingCanvas);
+            backgroundImage.Visibility = Visibility.Visible;
+            colorRect.Visibility = Visibility.Visible;
+            canvasImage.Source = rtb;
+
             // Remove ellipses only
             var shapes = drawingCanvas.Children.OfType<Ellipse>().ToList();
             foreach (var shape in shapes)

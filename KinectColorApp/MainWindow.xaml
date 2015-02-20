@@ -19,7 +19,7 @@
             <Image x:Name="backgroundImage" HorizontalAlignment="Left" Height="400" VerticalAlignment="Top" Width="600" Canvas.Top="20" Canvas.Left="20"/>
             <Rectangle x:Name="drawBorder" Height="480" Stroke="White" Width="640" StrokeThickness="20"/>
             <Rectangle x:Name="colorRect" StrokeThickness="20" Fill="Red" Height="20" Canvas.Top="493" Width="642"/>
-            <Image x:Name="image1" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Canvas.Left="10" Canvas.Top="10"/>
+            <Image x:Name="image1" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640"/>
             <Image x:Name="_0_code" Height="224" Canvas.Left="-16" Canvas.Top="-16" Width="225" Source="Resources/0_code.png"/>
             <Image x:Name="_1_code" Height="225" Canvas.Left="-11" Canvas.Top="265" Width="225" Source="Resources/1_code.png"/>
             <Image x:Name="_2_code" Height="225" Canvas.Left="236" Canvas.Top="151" Width="225" Source="Resources/2_code.png"/>

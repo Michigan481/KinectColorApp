@@ -35,7 +35,7 @@ namespace KinectColorApp
             colorRect.Visibility = Visibility.Hidden;
 
             buttons = new Ellipse[] { red_selector, blue_selector, green_selector };
-            drawController = new DrawController(drawingCanvas, backgroundImage, colorRect);
+            drawController = new DrawController(drawingCanvas, backgroundImage, colorRect, image1);
             soundController = new SoundController();
             kinectController = new KinectController(drawController, image1, soundController, buttons);
             //galileoController = new GalileoController(drawController, soundController, "COM3", 9600);
@@ -90,6 +90,9 @@ namespace KinectColorApp
         {
             drawingCanvas.Width = drawingGrid.ActualWidth;
             drawingCanvas.Height = drawingCanvas.Width * (3.0 / 4.0);
+
+            image1.Width = drawingGrid.ActualWidth;
+            image1.Height = drawingCanvas.Width * (3.0 / 4.0);
 
             drawBorder.Width = drawingGrid.ActualWidth;
             drawBorder.Height = drawBorder.Width * (3.0 / 4.0);

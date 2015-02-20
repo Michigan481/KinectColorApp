@@ -121,7 +121,12 @@ namespace KinectColorApp
             }
             else
             {
-                if (gotTouch == true) soundController.StopMusic();
+                if (gotTouch == true)
+                {
+                    soundController.StopMusic();
+                    drawController.SaveCanvas();
+                }
+
                 gotTouch = false;
             }
         }
