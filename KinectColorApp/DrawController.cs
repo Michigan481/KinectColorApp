@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,10 +14,14 @@ using System.Windows;
 
 namespace KinectColorApp
 {
+
     class DrawController
     {
         private Colors color = Colors.Red;
-        public Backgrounds background = Backgrounds.AlreadySet;
+        //public Backgrounds background = Backgrounds.AlreadySet;
+
+		public bool backgroundAlreadySet = true;
+
         private double ColorChangeSpeed = 60.0; // How fast does the color change with depth? smaller number changes faster.
 
         public int shouldChangeColor = -1;
@@ -26,24 +32,33 @@ namespace KinectColorApp
         public Rectangle colorRect;
         public Image canvasImage;
 
+		public List<Background> backgrounds;
+		public Background background;
+
         public DrawController(Canvas canvas, Image image, Rectangle rect, Image canvasImage)
         {
             drawingCanvas = canvas;
             backgroundImage = image;
             colorRect = rect;
             this.canvasImage = canvasImage;
+
+			//Get Backgrounds in Dropbox
+			backgrounds = new List<Background>();
+			findAndInitializeBackgrounds();
+			background = backgrounds[0];
         }
 
         public void CycleBackgrounds()
         {
-            int currBackground = prevBackground + 1;
-            if (currBackground == (int)Backgrounds.AlreadySet)
-            {
-                currBackground = 0;
-            }
+			int currBackground = prevBackground + 1;
+			if (currBackground >= backgrounds.Count)
+			{
+				currBackground = 0;
+			}
 
-            prevBackground = currBackground;
-            background = (Backgrounds)currBackground;
+			prevBackground = currBackground;
+			background = backgrounds[currBackground];
+			backgroundAlreadySet = false;
         }
 
         public void ColorChangeFlag(int new_color)
@@ -51,40 +66,47 @@ namespace KinectColorApp
             shouldChangeColor = new_color;
         }
 
-
-        public void ChangeBackground(Backgrounds new_background)
+		public void ChangeBackground()
         {
-            Console.WriteLine("Changing background to " + new_background);
+			Console.WriteLine("Changing background to " + background);
 
-            background = Backgrounds.AlreadySet;
-            
-            switch (new_background)
-            {
-                case Backgrounds.Farm:
-                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/animal.png"));
-                    break;
-                case Backgrounds.Pokemon:
-                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/pokemon.png"));
-                    break;
-                case Backgrounds.Turtle:
-                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/turtle.png"));
-                    break;
-                case Backgrounds.Planets:
-                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/planets.png"));
-                    break;
-                case Backgrounds.Pony:
-                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/pony.png"));
-                    break;
-                case Backgrounds.Car:
-                    backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/car.png"));
-                    break;
+			backgroundAlreadySet = true;
+			backgroundImage.Source = new BitmapImage(background.uri);
+			ClearScreen();
+		}
+        public void ChangeBackground(Background new_background)
+        {
+			Console.WriteLine("Changing background to " + new_background.uri);
 
-                default:
-                    break;
-            }
+			backgroundAlreadySet = true;
+			backgroundImage.Source = new BitmapImage(new_background.uri);
+			//switch (new_background)
+			//{
+			//	case Backgrounds.Farm:
+			//		backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/animal.png"));
+			//		break;
+			//	case Backgrounds.Pokemon:
+			//		backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/pokemon.png"));
+			//		break;
+			//	case Backgrounds.Turtle:
+			//		backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/turtle.png"));
+			//		break;
+			//	case Backgrounds.Planets:
+			//		backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/planets.png"));
+			//		break;
+			//	case Backgrounds.Pony:
+			//		backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/pony.png"));
+			//		break;
+			//	case Backgrounds.Car:
+			//		backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/car.png"));
+			//		break;
 
-            // And, in any case, clear screen:
-            ClearScreen();
+			//	default:
+			//		break;
+			//}
+
+			// And, in any case, clear screen:
+			ClearScreen();
 
         }
 
@@ -218,5 +240,34 @@ namespace KinectColorApp
                 }
             }
         }
+
+		public void findAndInitializeBackgrounds()
+		{
+			string dropBox = @"C:\Users\Robert\Dropbox";
+
+			string[] fileEntries = Directory.GetFiles(dropBox);
+			foreach(string file in fileEntries)
+			{ 
+				if(file.Substring(file.Length - 4, 4).Equals(".png"))
+				{ 
+					backgrounds.Add(new Background(file));
+					Console.WriteLine(file + ": Accepted");
+				}
+				else
+				{
+					Console.WriteLine(file + ": Not Accepted");
+				}
+			}
+		}
     }
+
+	class Background
+	{
+		public Uri uri;
+
+		public Background(string inUriString)
+		{
+				uri = new Uri(inUriString);
+		}
+	}
 }

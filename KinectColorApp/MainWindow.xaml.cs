@@ -20,7 +20,7 @@ using System.Windows.Media.Animation;
 namespace KinectColorApp
 {
     enum Colors {Red, Green, Blue, White};
-    enum Backgrounds {Farm, Pokemon, Turtle, Planets, Pony, Car, AlreadySet};
+    //enum Backgrounds {Farm, Pokemon, Turtle, Planets, Pony, Car, AlreadySet};
 
     public partial class MainWindow : Window
     {
@@ -45,7 +45,7 @@ namespace KinectColorApp
         private DrawController drawController;
         private SoundController soundController;
         private KinectController kinectController;
-        private GalileoController galileoController;
+        //private GalileoController galileoController;
         private KinectSensor sensor;
         bool has_started_calibrating = false;
         Ellipse[] buttons;
@@ -56,24 +56,25 @@ namespace KinectColorApp
             {
                 this.sensor = KinectSensor.KinectSensors[0];
 
-                if (this.sensor.Status == KinectStatus.Connected)
-                {
-                    Image[] codes = new Image[] { _0_code, _1_code, _2_code, _3_code, _4_code,};
-                    foreach (Image i in codes)
-                    {
-                        i.Visibility = Visibility.Hidden;
-                    }
-                    calController = new CalibrationController(sensor, kinectController, drawingCanvas, codes, image1);
-                    calController.CalibrationDidComplete += new CalibrationController.calibrationDidCompleteHandler(calibrationCompleted);
-
-                    this.sensor.ColorStream.Enable();
-                    this.sensor.DepthStream.Enable();
-                }
+				if (this.sensor.Status == KinectStatus.Connected)
+				{
+					Image[] codes = new Image[] { _0_code, _1_code, _2_code, _3_code, _4_code, };
+					foreach (Image i in codes)
+					{
+						i.Visibility = Visibility.Hidden;
+					}
+					calController = new CalibrationController(sensor, kinectController, drawingCanvas, codes, image1);
+					calController.CalibrationDidComplete += new CalibrationController.calibrationDidCompleteHandler(calibrationCompleted);
+					//sensor.AllFramesReady += kinectController.SensorAllFramesReady;//
+					//calibrationCompleted();//
+					this.sensor.ColorStream.Enable();
+					this.sensor.DepthStream.Enable();
+				}
             }
 
             this.KeyDown += new KeyEventHandler(OnKeyDown);
             soundController.StartMusic();
-            drawController.ChangeBackground(Backgrounds.Farm);
+            drawController.ChangeBackground();
             drawController.ChangeColor(Colors.Red);
 
             // Faded colored rectangle:
@@ -129,14 +130,14 @@ namespace KinectColorApp
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             Console.WriteLine(e.Key.ToString());
-            if (!has_started_calibrating)
-            {
-                _0_code.Visibility = Visibility.Visible;
-                this.sensor.AllFramesReady += calController.CalibrationAllFramesReady;
-                this.sensor.Start();
-                calibrationLabel.Content = "Calibrating...";
-                has_started_calibrating = true;
-            }
+			if (!has_started_calibrating)
+			{
+				_0_code.Visibility = Visibility.Visible;
+				this.sensor.AllFramesReady += calController.CalibrationAllFramesReady;
+				this.sensor.Start();
+				calibrationLabel.Content = "Calibrating...";
+				has_started_calibrating = true;
+			}
 
             if (e.Key.ToString() == "R" || e.Key.ToString() == "F") {
                 drawController.ClearScreen();

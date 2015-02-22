@@ -45,7 +45,7 @@ namespace KinectColorApp
         public void SensorAllFramesReady(object sender, AllFramesReadyEventArgs e)
         {
             // Check if we need to change background
-            if (drawController.background != Backgrounds.AlreadySet)
+            if (drawController.backgroundAlreadySet == false)
             {
                 drawController.ChangeBackground(drawController.background);
             }
