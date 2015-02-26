@@ -15,9 +15,9 @@
             <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
 
-        <Canvas x:Name="drawingCanvas" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Grid.ColumnSpan="4">
+        <Canvas x:Name="drawingCanvas" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640" Grid.ColumnSpan="4" Background="White">
             <Image x:Name="backgroundImage" HorizontalAlignment="Left" Height="400" VerticalAlignment="Top" Width="600" Canvas.Top="20" Canvas.Left="20"/>
-            <Rectangle x:Name="drawBorder" Height="480" Stroke="White" Width="640" StrokeThickness="20"/>
+            <Rectangle x:Name="drawBorder" Height="565" Stroke="Black" Width="724" StrokeThickness="55" Panel.ZIndex="5" Canvas.Left="-41" Canvas.Top="-27"/>
             <Rectangle x:Name="colorRect" StrokeThickness="20" Fill="Red" Height="20" Canvas.Top="493" Width="642"/>
             <Image x:Name="image1" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="640"/>
             <Image x:Name="_0_code" Height="224" Canvas.Left="-16" Canvas.Top="-16" Width="225" Source="Resources/0_code.png"/>
@@ -26,9 +26,51 @@
             <Image x:Name="_3_code" Height="225" Canvas.Left="476" Canvas.Top="-17" Width="225" Source="Resources/3_code.png"/>
             <Image x:Name="_4_code" Height="225" Canvas.Left="476" Canvas.Top="280" Width="225" Source="Resources/4_code.png"/>
             <Label x:Name="calibrationLabel" Content="Welcome! Press any button to calibrate." HorizontalContentAlignment="Center"  VerticalAlignment="Center" Height="47" FontFamily="Segoe Marker" FontSize="30" Canvas.Left="125" Canvas.Top="373" HorizontalAlignment="Center"/>
-            <Ellipse x:Name="red_selector" HorizontalAlignment="Left" Height="48" Stroke="Black" VerticalAlignment="Top" Width="48" Fill="#FFFF2C2C" Canvas.Left="602" Canvas.Top="425"/>
-            <Ellipse x:Name="green_selector" HorizontalAlignment="Left" Height="48" Stroke="Black" VerticalAlignment="Top" Width="48" Fill="#FF35FF35" Canvas.Left="602" Canvas.Top="373"/>
-            <Ellipse x:Name="blue_selector" HorizontalAlignment="Left" Height="47" Stroke="Black" VerticalAlignment="Top" Width="48" Fill="#FF734EFF" Canvas.Left="602" Canvas.Top="323"/>
+            <Ellipse x:Name="red_selector" HorizontalAlignment="Left" Height="48" VerticalAlignment="Top" Width="48" Canvas.Left="602" Canvas.Top="435" Panel.ZIndex="6" StrokeThickness="3" Stroke="#FFFF3E00">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="Red" Offset="0"/>
+                        <GradientStop Color="#4CFD9200" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse x:Name="green_selector" HorizontalAlignment="Left" Height="48" VerticalAlignment="Top" Width="48" Canvas.Left="602" Canvas.Top="368" Panel.ZIndex="6" Stroke="#FF32FF00" StrokeThickness="3">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#FF00FF3C" Offset="0"/>
+                        <GradientStop Color="#4CFFF800" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse x:Name="blue_selector" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="48" Canvas.Left="602" Canvas.Top="303" Panel.ZIndex="6" Stroke="#FF2400FF" StrokeThickness="3">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#FF0001FF" Offset="0"/>
+                        <GradientStop Color="#4CCA00FF" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse x:Name="eraser_selector" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="48" Canvas.Left="602" Canvas.Top="238" Panel.ZIndex="6" Stroke="White" StrokeThickness="3">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="White" Offset="0"/>
+                        <GradientStop Color="#4CFFFFFF" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse x:Name="refresh_selector" HorizontalAlignment="Left" Height="29" VerticalAlignment="Top" Width="30" Canvas.Left="610" Canvas.Top="84" Panel.ZIndex="6" Stroke="White" StrokeThickness="3" RenderTransformOrigin="0.5,0.5" Opacity="0.3">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse x:Name="background_selector" HorizontalAlignment="Left" Height="29" VerticalAlignment="Top" Width="30" Canvas.Left="610" Canvas.Top="121" Panel.ZIndex="6" Stroke="White" StrokeThickness="3" Opacity="0.3">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="Resources/plus.jpg" Stretch="UniformToFill"/>
+                </Ellipse.Fill>
+            </Ellipse>
 
 
         </Canvas>

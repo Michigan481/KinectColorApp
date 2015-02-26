@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Kinect;
 using System.Windows.Shapes;
+using System.Windows.Media.Effects;
 
 namespace KinectColorApp
 {
@@ -19,9 +20,10 @@ namespace KinectColorApp
         private SoundController soundController;
         Ellipse[] buttons;
 
+        DateTime last_background_change = DateTime.Now;
         private bool hasSetDepthThreshold = false;
         private int DepthThreshold = 9000000;
-        const int TextileSpacing = 15; // How deep do we have to push in to start drawing?
+        const int TextileSpacing = 5; // How deep do we have to push in to start drawing?
 
         // Variables used for calibration
         public double[] calibration_coefficients;
@@ -146,19 +148,66 @@ namespace KinectColorApp
                 
                 if (y >= top && x >= left && y <= top + ellipse.Height && x <= left + ellipse.Width)
                 {
+                    DropShadowEffect glowEffect = new DropShadowEffect();
+                    glowEffect.ShadowDepth = 0;
+                    glowEffect.Opacity = 1;
+                    glowEffect.BlurRadius = 30;
+
+                    if (ellipse.Name != "refresh_selector" && ellipse.Name != "background_selector")
+                    {
+                        foreach (Ellipse el in buttons)
+                        {
+                            if (el.Name != "refresh_selector" && el.Name != "background_selector")
+                            {
+                                el.Fill.Opacity = 0.3;
+                                el.Effect = null;
+                            }
+                        }
+                    }
+
                     // Use this button
                     if (ellipse.Name == "red_selector")
                     {
+                        ellipse.Fill.Opacity = 1;
+                        glowEffect.Color = Color.FromArgb(255, 255, 44, 44);
+                        ellipse.Effect = glowEffect;
                         drawController.ChangeColor(Colors.Red);
                     }
                     else if (ellipse.Name == "green_selector")
                     {
+                        ellipse.Fill.Opacity = 1;
+                        glowEffect.Color = Color.FromArgb(255, 53, 255, 53);
+                        ellipse.Effect = glowEffect;
                         drawController.ChangeColor(Colors.Green);
                     }
                     else if (ellipse.Name == "blue_selector")
                     {
+                        ellipse.Fill.Opacity = 1;
+                        glowEffect.Color = Color.FromArgb(255, 115, 78, 255);
+                        ellipse.Effect = glowEffect;
                         drawController.ChangeColor(Colors.Blue);
                     }
+                    else if (ellipse.Name == "eraser_selector")
+                    {
+                        ellipse.Fill.Opacity = 1;
+                        glowEffect.Color = Color.FromArgb(255, 255, 255, 255);
+                        ellipse.Effect = glowEffect;
+                        drawController.ChangeColor(Colors.White);
+                    }
+                    else if (ellipse.Name == "background_selector")
+                    {
+                        TimeSpan interval = DateTime.Now - last_background_change;
+                        if (interval.Seconds >= 0.5)
+                        {
+                            drawController.CycleBackgrounds();
+                            last_background_change = DateTime.Now;
+                        }
+                    }
+                    else if (ellipse.Name == "refresh_selector")
+                    {
+                        drawController.ClearScreen();
+                    }
+
                     return;
                 }
             }

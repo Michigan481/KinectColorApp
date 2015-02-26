@@ -18,7 +18,6 @@ namespace KinectColorApp
     class DrawController
     {
         private Colors color = Colors.Red;
-        //public Backgrounds background = Backgrounds.AlreadySet;
 
 		public bool backgroundAlreadySet = true;
 
@@ -32,15 +31,17 @@ namespace KinectColorApp
         public Rectangle colorRect;
         public Image canvasImage;
 
+        Ellipse[] buttons;
 		public List<Background> backgrounds;
 		public Background background;
 
-        public DrawController(Canvas canvas, Image image, Rectangle rect, Image canvasImage)
+        public DrawController(Canvas canvas, Image image, Rectangle rect, Image canvasImage, Ellipse[] buttons)
         {
             drawingCanvas = canvas;
             backgroundImage = image;
             colorRect = rect;
             this.canvasImage = canvasImage;
+            this.buttons = buttons;
 
 			//Get Backgrounds in Dropbox
 			backgrounds = new List<Background>();
@@ -80,30 +81,6 @@ namespace KinectColorApp
 
 			backgroundAlreadySet = true;
 			backgroundImage.Source = new BitmapImage(new_background.uri);
-			//switch (new_background)
-			//{
-			//	case Backgrounds.Farm:
-			//		backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/animal.png"));
-			//		break;
-			//	case Backgrounds.Pokemon:
-			//		backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/pokemon.png"));
-			//		break;
-			//	case Backgrounds.Turtle:
-			//		backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/turtle.png"));
-			//		break;
-			//	case Backgrounds.Planets:
-			//		backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/planets.png"));
-			//		break;
-			//	case Backgrounds.Pony:
-			//		backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/pony.png"));
-			//		break;
-			//	case Backgrounds.Car:
-			//		backgroundImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/car.png"));
-			//		break;
-
-			//	default:
-			//		break;
-			//}
 
 			// And, in any case, clear screen:
 			ClearScreen();
@@ -144,7 +121,7 @@ namespace KinectColorApp
             }
             
             // Change color indicator:
-            colorRect.Fill = gradientBrush;
+            //colorRect.Fill = gradientBrush;
         }
 
         public void DrawEllipseAtPoint(double x, double y, int depth)
@@ -203,7 +180,7 @@ namespace KinectColorApp
             var shapes = drawingCanvas.Children.OfType<Ellipse>().ToList();
             foreach (var shape in shapes)
             {
-                if (shape.Name != "red_selector" && shape.Name != "blue_selector" && shape.Name != "green_selector")
+                if (shape.Name != "red_selector" && shape.Name != "blue_selector" && shape.Name != "green_selector" && shape.Name != "eraser_selector" && shape.Name != "background_selector" && shape.Name != "refresh_selector")
                 {
                     drawingCanvas.Children.Remove(shape);
                 }
@@ -217,7 +194,12 @@ namespace KinectColorApp
             Size size = new Size(System.Windows.SystemParameters.PrimaryScreenWidth, System.Windows.SystemParameters.PrimaryScreenHeight);
             drawingCanvas.Measure(size);
             backgroundImage.Visibility = Visibility.Hidden;
-            colorRect.Visibility = Visibility.Hidden;
+
+            foreach (Ellipse ellipse in buttons)
+            {
+                ellipse.Visibility = Visibility.Hidden;
+            }
+
             var rtb = new RenderTargetBitmap(
                 (int)System.Windows.SystemParameters.PrimaryScreenWidth, //width 
                 (int)System.Windows.SystemParameters.PrimaryScreenHeight, //height 
@@ -227,14 +209,18 @@ namespace KinectColorApp
                 );
             rtb.Render(drawingCanvas);
             backgroundImage.Visibility = Visibility.Visible;
-            colorRect.Visibility = Visibility.Visible;
+            foreach (Ellipse ellipse in buttons)
+            {
+                ellipse.Visibility = Visibility.Visible;
+            }
+
             canvasImage.Source = rtb;
 
             // Remove ellipses only
             var shapes = drawingCanvas.Children.OfType<Ellipse>().ToList();
             foreach (var shape in shapes)
             {
-                if (shape.Name != "red_selector" && shape.Name != "blue_selector" && shape.Name != "green_selector")
+                if (shape.Name != "red_selector" && shape.Name != "blue_selector" && shape.Name != "green_selector" && shape.Name != "eraser_selector" && shape.Name != "background_selector" && shape.Name != "refresh_selector")
                 {
                     drawingCanvas.Children.Remove(shape);
                 }
@@ -243,7 +229,7 @@ namespace KinectColorApp
 
 		public void findAndInitializeBackgrounds()
 		{
-			string dropBox = @"C:\Users\Robert\Dropbox";
+			string dropBox = @"C:\Users\Evan\Dropbox";
 
 			string[] fileEntries = Directory.GetFiles(dropBox);
 			foreach(string file in fileEntries)

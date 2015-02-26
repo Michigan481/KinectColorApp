@@ -148,6 +148,7 @@
     <Content Include="Resources\change_background_SFX.wav" />
     <Content Include="Resources\eraser_SFX.wav" />
     <Content Include="Resources\green_SFX.wav" />
+    <Resource Include="Resources\plus.jpg" />
     <Content Include="Resources\red_SFX.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -16,6 +16,7 @@ using Microsoft.Kinect;
 using System.Threading;
 using System.Windows.Threading;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 
 namespace KinectColorApp
 {
@@ -33,19 +34,18 @@ namespace KinectColorApp
             backgroundImage.Height = drawingGrid.ActualHeight;
             backgroundImage.Visibility = Visibility.Hidden;
             colorRect.Visibility = Visibility.Hidden;
+            drawBorder.Visibility = Visibility.Hidden;
 
-            buttons = new Ellipse[] { red_selector, blue_selector, green_selector };
-            drawController = new DrawController(drawingCanvas, backgroundImage, colorRect, image1);
+            buttons = new Ellipse[] { red_selector, blue_selector, green_selector, eraser_selector, background_selector, refresh_selector };
+            drawController = new DrawController(drawingCanvas, backgroundImage, colorRect, image1, buttons);
             soundController = new SoundController();
             kinectController = new KinectController(drawController, image1, soundController, buttons);
-            //galileoController = new GalileoController(drawController, soundController, "COM3", 9600);
         }
 
         private CalibrationController calController;
         private DrawController drawController;
         private SoundController soundController;
         private KinectController kinectController;
-        //private GalileoController galileoController;
         private KinectSensor sensor;
         bool has_started_calibrating = false;
         Ellipse[] buttons;
@@ -77,10 +77,6 @@ namespace KinectColorApp
             drawController.ChangeBackground();
             drawController.ChangeColor(Colors.Red);
 
-            // Faded colored rectangle:
-            colorRect.Width = drawingCanvas.ActualWidth;
-            Canvas.SetZIndex(colorRect, 11);
-
             foreach (Ellipse ellipse in buttons)
             {
                 ellipse.Visibility = Visibility.Hidden;
@@ -94,9 +90,6 @@ namespace KinectColorApp
 
             image1.Width = drawingGrid.ActualWidth;
             image1.Height = drawingCanvas.Width * (3.0 / 4.0);
-
-            drawBorder.Width = drawingGrid.ActualWidth;
-            drawBorder.Height = drawBorder.Width * (3.0 / 4.0);
 
             backgroundImage.Width = drawingGrid.ActualWidth - 40;
             backgroundImage.Height = drawingGrid.ActualHeight - 40;
@@ -114,17 +107,29 @@ namespace KinectColorApp
 
             calibrationLabel.BeginAnimation(MediaElement.OpacityProperty, newAnimation, HandoffBehavior.SnapshotAndReplace);
 
-            colorRect.Visibility = Visibility.Visible;
+            //colorRect.Visibility = Visibility.Visible;
             backgroundImage.Visibility = Visibility.Visible;
+            drawBorder.Visibility = Visibility.Visible;
             Canvas.SetZIndex(calibrationLabel, 2);
             Canvas.SetZIndex(backgroundImage, 1);
 
             foreach (Ellipse ellipse in buttons)
             {
-                Canvas.SetLeft(ellipse, drawingCanvas.Width - ellipse.Width - 5);
+                Canvas.SetLeft(ellipse, drawingCanvas.Width - ellipse.Width - 10);
                 ellipse.Visibility = Visibility.Visible;
-                Canvas.SetZIndex(ellipse, 2);
+                ellipse.Fill.Opacity = 0.3;
+                //Canvas.SetZIndex(ellipse, 2);
             }
+
+            DropShadowEffect glowEffect = new DropShadowEffect();
+            glowEffect.ShadowDepth = 0;
+            glowEffect.Opacity = 255;
+            glowEffect.BlurRadius = 30;
+            glowEffect.Color = Color.FromArgb(255, 255, 80, 44);
+            red_selector.Effect = glowEffect;
+            red_selector.Fill.Opacity = 1;
+            refresh_selector.Fill.Opacity = 1;
+            background_selector.Fill.Opacity = 1;
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
@@ -192,7 +197,6 @@ namespace KinectColorApp
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             StopKinect(this.sensor);
-            //galileoController.closePort();
         }
     }
 }
