@@ -33,8 +33,8 @@ namespace KinectColorApp
             backgroundImage.Width = drawingGrid.ActualWidth;
             backgroundImage.Height = drawingGrid.ActualHeight;
             backgroundImage.Visibility = Visibility.Hidden;
-            colorRect.Visibility = Visibility.Hidden;
             drawBorder.Visibility = Visibility.Hidden;
+            colorRect.Visibility = Visibility.Hidden;
 
             buttons = new Ellipse[] { red_selector, blue_selector, green_selector, eraser_selector, background_selector, refresh_selector };
             drawController = new DrawController(drawingCanvas, backgroundImage, colorRect, image1, buttons);
@@ -63,16 +63,26 @@ namespace KinectColorApp
 					{
 						i.Visibility = Visibility.Hidden;
 					}
+                    _0_code.Visibility = Visibility.Visible;
 					calController = new CalibrationController(sensor, kinectController, drawingCanvas, codes, image1);
 					calController.CalibrationDidComplete += new CalibrationController.calibrationDidCompleteHandler(calibrationCompleted);
-					//sensor.AllFramesReady += kinectController.SensorAllFramesReady;//
-					//calibrationCompleted();//
+					//sensor.AllFramesReady += kinectController.SensorAllFramesReady;
+					//calibrationCompleted();
+                    
+                    this.sensor.AllFramesReady += calController.DisplayColorImageAllFramesReady;
 					this.sensor.ColorStream.Enable();
 					this.sensor.DepthStream.Enable();
+                    //this.sensor.ColorStream.CameraSettings.Contrast = 2.0;
+
+                    Console.WriteLine("abc");
+
+                    this.sensor.Start();
 				}
             }
 
             this.KeyDown += new KeyEventHandler(OnKeyDown);
+            this.MouseDown += new MouseButtonEventHandler(OnClick);
+            this.MouseDoubleClick += new MouseButtonEventHandler(OnDoubleClick);
             soundController.StartMusic();
             drawController.ChangeBackground();
             drawController.ChangeColor(Colors.Red);
@@ -81,6 +91,8 @@ namespace KinectColorApp
             {
                 ellipse.Visibility = Visibility.Hidden;
             }
+
+            
         }
 
         private void Window_Size_Did_Change(object sender, RoutedEventArgs e)
@@ -107,7 +119,6 @@ namespace KinectColorApp
 
             calibrationLabel.BeginAnimation(MediaElement.OpacityProperty, newAnimation, HandoffBehavior.SnapshotAndReplace);
 
-            //colorRect.Visibility = Visibility.Visible;
             backgroundImage.Visibility = Visibility.Visible;
             drawBorder.Visibility = Visibility.Visible;
             Canvas.SetZIndex(calibrationLabel, 2);
@@ -132,17 +143,28 @@ namespace KinectColorApp
             background_selector.Fill.Opacity = 1;
         }
 
+        private void OnClick(object sender, MouseButtonEventArgs e)
+        {
+            if (!has_started_calibrating)
+            {
+                Canvas.SetZIndex(image1, 0);
+                this.sensor.AllFramesReady -= calController.DisplayColorImageAllFramesReady;
+                this.sensor.AllFramesReady += calController.CalibrationAllFramesReady;
+                _0_code.Visibility = Visibility.Visible;
+                calibrationLabel.Content = "Calibrating...";
+                has_started_calibrating = true;
+                image1.Source = null;
+            }
+        }
+
+        private void OnDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             Console.WriteLine(e.Key.ToString());
-			if (!has_started_calibrating)
-			{
-				_0_code.Visibility = Visibility.Visible;
-				this.sensor.AllFramesReady += calController.CalibrationAllFramesReady;
-				this.sensor.Start();
-				calibrationLabel.Content = "Calibrating...";
-				has_started_calibrating = true;
-			}
 
             if (e.Key.ToString() == "R" || e.Key.ToString() == "F") {
                 drawController.ClearScreen();
@@ -156,6 +178,21 @@ namespace KinectColorApp
             {
                 Application.Current.Shutdown();
             }
+            else if (e.Key.ToString() == "U")
+            {
+                if (this.sensor.ColorStream.CameraSettings.Contrast < 2.0)
+                {
+                    this.sensor.ColorStream.CameraSettings.Contrast += 0.1;
+                } 
+            }
+            else if (e.Key.ToString() == "D")
+            {
+                if (this.sensor.ColorStream.CameraSettings.Contrast > 0.6)
+                {
+                    this.sensor.ColorStream.CameraSettings.Contrast -= 0.1;
+                } 
+            }
+
             else if ((e.Key >= Key.D0 && e.Key <= Key.D3) || e.Key == Key.W || e.Key == Key.A || e.Key == Key.S)
             {
                 if (e.Key == Key.W)

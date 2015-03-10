@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using Microsoft.Kinect;
 using ZXing.Kinect;
 
@@ -21,6 +22,8 @@ namespace KinectColorApp
         private KinectController kinectController;
         private Canvas canvas;
         private Image debugImage;
+
+        int threshold = -1;
 
         Image[] codes;
         Point[] code_points = new Point[5];
@@ -38,22 +41,62 @@ namespace KinectColorApp
             this.sensor = sensor;
         }
 
-        public void CalibrationAllFramesReady(object sender, AllFramesReadyEventArgs e)
+        public void DisplayColorImageAllFramesReady(object sender, AllFramesReadyEventArgs e)
         {
             using (ColorImageFrame colorFrame = e.OpenColorImageFrame())
             {
+                Console.WriteLine("here");
                 if (colorFrame == null) return;
+
+                byte[] pixels = new byte[colorFrame.PixelDataLength];
+                colorFrame.CopyPixelDataTo(pixels);
+                int stride = colorFrame.Width * 4;
+                debugImage.Source = BitmapSource.Create(colorFrame.Width, colorFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
 
                 using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
                 {
-                    if (depthFrame == null) return;
+                    short[] rawDepthData = new short[depthFrame.PixelDataLength];
+                    depthFrame.CopyPixelDataTo(rawDepthData);
+                    int depth = rawDepthData[200*depthFrame.Width + 300] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+                    threshold = depth;
+                    
+                }
+
+            }
+        }
+
+        int next_code_num = 0;
+        bool working = false; // Skip frames if we're still processing stuff.
+
+        public void CalibrationAllFramesReady(object sender, AllFramesReadyEventArgs e)
+        {
+            if (working) return;
+            working = true;
+
+            using (ColorImageFrame colorFrame = e.OpenColorImageFrame())
+            {
+                if (colorFrame == null)
+                {
+                    working = false;
+                    return;
+                }
+
+                using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
+                {
+                    if (depthFrame == null)
+                    {
+                        working = false;
+                        return;
+                    }
 
                     //byte[] pixels = new byte[colorFrame.PixelDataLength];
                     //colorFrame.CopyPixelDataTo(pixels);
                     //int stride = colorFrame.Width * 4;
                     //debugImage.Source = BitmapSource.Create(colorFrame.Width, colorFrame.Height, 96, 96, PixelFormats.Bgr32, null, pixels, stride);
+                    //debugImage.Visibility = Visibility.Visible;
 
-                    int code_num = find_code(colorFrame, depthFrame);
+                    //int code_num = find_code(colorFrame, depthFrame);
+                    int code_num = find_touch(colorFrame, depthFrame);
                     if (code_num >= 0)
                     {
                         // Make the next code visible.
@@ -61,9 +104,12 @@ namespace KinectColorApp
                         {
                             codes[code_num].Visibility = Visibility.Hidden;
                             codes[code_num + 1].Visibility = Visibility.Visible;
+                            next_code_num++;
+                            Thread.Sleep(1000);
                         }
                         else
                         {
+                            Thread.Sleep(1000);
                             // We are done. Calculate the coefficients.
                             sensor.AllFramesReady -= this.CalibrationAllFramesReady;
                             codes[4].Visibility = Visibility.Hidden;
@@ -71,13 +117,48 @@ namespace KinectColorApp
                             
                             Point center_top_left = code_points[0];
                             Point center_bot_right = code_points[4];
-                            kinectController.Calibrate((int)(center_top_left.X + code_size.X), (int)(center_top_left.Y + 1.25*code_size.Y), (int)(center_bot_right.X - code_size.X), (int)(center_bot_right.Y - 1.25*code_size.Y));
+                            kinectController.Calibrate((int)(center_top_left.X + 1.25*code_size.X), (int)(center_top_left.Y + 0.7*code_size.Y), (int)(center_bot_right.X - 1.25*code_size.X), (int)(center_bot_right.Y - 0.8*code_size.Y));
                             sensor.AllFramesReady += kinectController.SensorAllFramesReady;
                             CalibrationDidComplete();
                         }
                     }
                 }
             }
+
+            working = false;
+        }
+
+        
+
+        int find_touch(ColorImageFrame colorFrame, DepthImageFrame depthFrame)
+        {
+            int minDepthIndex = 0;
+            int maxDepthIndex = 479 * depthFrame.Width;
+            short[] rawDepthData = new short[depthFrame.PixelDataLength];
+            depthFrame.CopyPixelDataTo(rawDepthData);
+
+            for (int depthIndex = minDepthIndex; depthIndex < maxDepthIndex; depthIndex++)
+            {
+                int depth = rawDepthData[depthIndex] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+
+                // Ignore invalid depth values
+                if (depth == -1 || depth == 0) continue;
+
+                if ((threshold - depth) > 150)
+                {
+                    Console.WriteLine(threshold - depth);
+                    // Get the point in the depth frame at the center of the barcode
+                    double x_kinect = (depthIndex % depthFrame.Width);
+                    double y_kinect = (depthIndex / depthFrame.Width);
+                    Point p = new Point(x_kinect, y_kinect);
+                    code_points[next_code_num] = p;
+
+                    Console.WriteLine("Found code " + next_code_num + " at (" + x_kinect + ", " + y_kinect + ").");
+                    return next_code_num;
+                }
+            }
+
+            return -1;
         }
 
         int find_code(ColorImageFrame colorFrame, DepthImageFrame depthFrame)

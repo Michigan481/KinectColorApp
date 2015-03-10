@@ -46,3 +46,7 @@ C:\Users\Evan\Code\KinectColorApp\KinectColorApp\obj\Debug\KinectColorApp.csproj
 C:\Users\Evan\Code\KinectColorApp\KinectColorApp\obj\Debug\KinectColorApp.exe
 C:\Users\Evan\Code\KinectColorApp\KinectColorApp\obj\Debug\KinectColorApp.pdb
 C:\Users\Evan\Code\KinectColorApp\KinectColorApp\obj\Debug\KinectColorApp.csprojResolveAssemblyReference.cache
+C:\Users\Evan\Code\KinectColorApp\KinectColorApp\bin\Debug\KinectColorApp.exe.manifest
+C:\Users\Evan\Code\KinectColorApp\KinectColorApp\bin\Debug\KinectColorApp.application
+C:\Users\Evan\Code\KinectColorApp\KinectColorApp\obj\Debug\KinectColorApp.exe.manifest
+C:\Users\Evan\Code\KinectColorApp\KinectColorApp\obj\Debug\KinectColorApp.application

@@ -40,6 +40,16 @@ namespace KinectColorApp
 
         public void Calibrate(int top_left_x, int top_left_y, int bottom_right_x, int bottom_right_y)
         {
+            if (top_left_y > 480 || top_left_y < 0)
+            {
+                top_left_y = 0;
+            }
+
+            if (bottom_right_y > 480 || bottom_right_y < 0)
+            {
+                bottom_right_y = 480;
+            }
+
             topLeft = new Point(top_left_x, top_left_y);
             bottomRight = new Point(bottom_right_x, bottom_right_y);
         }
@@ -80,18 +90,22 @@ namespace KinectColorApp
             int bestDepthIndex = -1;
             int minDepthIndex = (int)this.topLeft.Y * depthFrame.Width;
             int maxDepthIndex = (int)this.bottomRight.Y * depthFrame.Width;
-            
+
+            minDepthIndex = 0;
+            maxDepthIndex = 479 * depthFrame.Width;
+
+            Console.WriteLine(minDepthIndex + " " + depthFrame.Width);
             for (int depthIndex = minDepthIndex; depthIndex < maxDepthIndex; depthIndex++)
-            {
+            {/*
                 // Skip this depth index if it's horizontally outside of our textile
                 int x_kinect = (int)((depthIndex) % depthFrame.Width);
                 
                 if (x_kinect < topLeft.X) { continue; }
                 else if (x_kinect > bottomRight.X)
                 {
-                    depthIndex += (depthFrame.Width - (int)(bottomRight.X - topLeft.X - 1));
+                    //depthIndex += (depthFrame.Width - (int)(bottomRight.X - topLeft.X - 1));
                     continue;
-                }
+                }*/
 
                 int depth = rawDepthData[depthIndex] >> DepthImageFrame.PlayerIndexBitmaskWidth;
                 
@@ -139,7 +153,7 @@ namespace KinectColorApp
             double y_kinect = (depthIndex / depthFrame.Width);
 
             double x = x_kinect * calibration_coefficients[0] + y_kinect * calibration_coefficients[1] + calibration_coefficients[2] + 3;
-            double y = x_kinect * calibration_coefficients[3] + y_kinect * calibration_coefficients[4] + calibration_coefficients[5] - 5;
+            double y = x_kinect * calibration_coefficients[3] + y_kinect * calibration_coefficients[4] + calibration_coefficients[5] + 10;
             
             foreach (Ellipse ellipse in buttons)
             {
